@@ -10,10 +10,10 @@ body {
     background-color: #0f172a;
     font-family: 'Arial', sans-serif;
     margin: 0;
-    padding-top: 80px; /* optional spacing for content below fixed header */
+    padding-top: 80px; /* header ke liye space */
 }
 
-/* Top header container */
+/* Top header */
 .header {
     position: fixed;
     top: 0;
@@ -36,10 +36,7 @@ body {
     text-shadow: 2px 2px 6px rgba(0,0,0,0.5);
 }
 
-/* Search bar */
-.search-container {
-    /* Already inside header, so flex-end */
-}
+/* Search */
 .search-input {
     padding: 6px 12px;
     border-radius: 10px;
@@ -87,10 +84,24 @@ body {
     font-size: 1rem;
     color: #facc15;
 }
+.player-name .overall {
+    font-size: 0.9rem;
+    color: #fff;
+    margin-top: 2px;
+}
+.player-name .rank {
+    font-size: 0.8rem;
+    color: #22c55e; /* green for ranks */
+    font-weight: bold;
+}
 .player-name .region {
     font-size: 0.8rem;
-    color: #cbd5e1;
+    color: #f87171; /* red color for region */
+    font-weight: bold;
+    margin-left: 5px;
 }
+
+/* Gamemodes */
 .gamemodes {
     display: flex;
     gap: 12px;
@@ -119,7 +130,7 @@ body {
     width: 100%;
 }
 
-/* Glow */
+/* Glow for top */
 @keyframes proGlow {0% {box-shadow:0 0 8px rgba(255,255,255,0.2);}50% {box-shadow:0 0 16px rgba(255,255,255,0.5);}100% {box-shadow:0 0 8px rgba(255,255,255,0.2);}}
 .top-1 { border: 3px solid gold; animation: proGlow 1.5s infinite; }
 .top-2 { border: 3px solid silver; animation: proGlow 1.5s infinite; }
@@ -138,10 +149,7 @@ body {
     transition: opacity 0.3s ease;
     z-index: 900;
 }
-#modal-backdrop.active {
-    opacity: 1;
-    pointer-events: all;
-}
+#modal-backdrop.active { opacity: 1; pointer-events: all; }
 #modal {
     position: fixed;
     top: 50%;
@@ -158,28 +166,15 @@ body {
 }
 #modal.active { transform: translate(-50%, -50%) scale(1); }
 #modal h2 { font-size: 1.4rem; font-weight: bold; margin-bottom: 6px; }
-#modal .region { font-size: 0.9rem; color: #cbd5e1; margin-bottom: 10px; }
+#modal .region { font-size: 0.9rem; color: #f87171; margin-bottom: 10px; }
 #modal .overall { background: #6366f1; padding: 4px 8px; border-radius: 6px; font-weight: bold; margin-bottom: 12px; display: inline-block; }
-#modal .close-btn {
-    position: absolute;
-    top: 8px;
-    right: 10px;
-    cursor: pointer;
-    font-weight: bold;
-    font-size: 1.2rem;
-}
-#modal .modal-skin {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    border: 3px solid gold;
-    margin-bottom: 8px;
-}
+#modal .close-btn { position: absolute; top: 8px; right: 10px; cursor: pointer; font-weight: bold; font-size: 1.2rem; }
+#modal .modal-skin { width: 80px; height: 80px; border-radius: 50%; border: 3px solid gold; margin-bottom: 8px; }
 </style>
 </head>
 <body>
 
-<!-- Top Header -->
+<!-- Header -->
 <div class="header">
     <div class="logo">Cracked Tiers</div>
     <div class="search-container">
@@ -189,10 +184,8 @@ body {
 
 <div id="players-container" class="max-w-6xl mx-auto space-y-3 mt-5"></div>
 
-<!-- Modal backdrop -->
-<div id="modal-backdrop"></div>
-
 <!-- Modal -->
+<div id="modal-backdrop"></div>
 <div id="modal">
     <span class="close-btn" onclick="closeModal()">×</span>
     <img src="" alt="Skin" class="modal-skin" id="modalSkin">
@@ -203,7 +196,6 @@ body {
 </div>
 
 <script>
-// Player data
 const players = [
     { position: 1, name: "brainless100", region: "AS", overall: 405, gamemodes: { Axe: "HT2", Nethpot: "HT4", Mace: "HT3 Strong", Tank: "-", UHC: "-", Crystal: "-" } },
     { position: 2, name: "GummyBearTheGOAT", region: "AS", overall: 320, gamemodes: { Axe: "LT3", Nethpot: "HT3", Mace: "-", Tank: "-", UHC: "LT3", Crystal: "-" } },
@@ -221,7 +213,14 @@ const gamemodeIcons = {
     Crystal: "icon/crystal.png"
 };
 
-// Generate players
+// Assign rank based on overall
+function getRank(points){
+    if(points >= 350) return "Grand Master";
+    else if(points >= 250) return "Combat Master";
+    else return "Combat Ace";
+}
+
+// Create players
 const container = document.getElementById("players-container");
 players.forEach(player => {
     const row = document.createElement("div");
@@ -237,8 +236,9 @@ players.forEach(player => {
         <div class="font-bold text-yellow-400">${player.position}.</div>
         <img src="https://mc-heads.net/avatar/${player.name}/64" alt="${player.name}" class="skin">
         <div class="player-name">
-            <div class="name">${player.name}</div>
-            <div class="region">${player.region}</div>
+            <div class="name">${player.name} <span class="region">[${player.region}]</span></div>
+            <div class="overall">Overall: ${player.overall} points</div>
+            <div class="rank">${getRank(player.overall)}</div>
         </div>
     `;
 
@@ -258,7 +258,7 @@ players.forEach(player => {
     row.addEventListener("click", () => openModal(player));
 });
 
-// Modal
+// Modal functions
 const modal = document.getElementById("modal");
 const backdrop = document.getElementById("modal-backdrop");
 const modalName = document.getElementById("modalName");
@@ -288,7 +288,7 @@ function closeModal(){
     backdrop.classList.remove("active");
 }
 
-// Search bar functionality
+// Search
 document.getElementById("searchInput").addEventListener("keypress", function(e){
     if(e.key === "Enter"){
         const name = e.target.value.trim();
