@@ -50,4 +50,198 @@ h1 {
     border-radius: 12px;
     transition: transform 0.2s, box-shadow 0.4s;
 }
-.player-row:hover
+.player-row:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 25px rgba(255,255,255,0.2);
+}
+.player-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 220px;
+}
+.player-info img.skin {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    border: 2px solid #facc15;
+}
+.player-name {
+    display: flex;
+    flex-direction: column;
+}
+.player-name .name {
+    font-weight: bold;
+    font-size: 1rem;
+    color: #facc15;
+}
+.player-name .region {
+    font-size: 0.8rem;
+    color: #cbd5e1;
+}
+.gamemodes {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+}
+.gamemode-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 60px;
+}
+.gamemode-item img {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 2px;
+    object-fit: contain;
+}
+.tier-badge {
+    background-color: #1e293b;
+    color: #f8fafc;
+    padding: 2px 6px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    text-align: center;
+    font-weight: 600;
+    width: 100%;
+}
+
+/* Glow */
+@keyframes proGlow {0% {box-shadow:0 0 8px rgba(255,255,255,0.2);}50% {box-shadow:0 0 16px rgba(255,255,255,0.5);}100% {box-shadow:0 0 8px rgba(255,255,255,0.2);}}
+.top-1 { border: 3px solid gold; animation: proGlow 1.5s infinite; }
+.top-2 { border: 3px solid silver; animation: proGlow 1.5s infinite; }
+.top-3 { border: 3px solid #cd7f32; animation: proGlow 1.5s infinite; }
+.next-players { border: 2px solid grey; background: rgba(80,80,80,0.1); }
+
+/* Modal */
+#modal-backdrop {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(6px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    z-index: 90;
+}
+#modal-backdrop.active {
+    opacity: 1;
+    pointer-events: all;
+}
+#modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    background-color: #1e293b;
+    padding: 20px;
+    border-radius: 12px;
+    z-index: 100;
+    width: 320px;
+    color: #fff;
+    transition: transform 0.3s ease;
+    box-shadow: 0 0 25px rgba(0,0,0,0.7);
+}
+#modal.active { transform: translate(-50%, -50%) scale(1); }
+#modal h2 { font-size: 1.2rem; font-weight: bold; margin-bottom: 10px; color: #facc15;}
+#modal .close-btn {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+</style>
+</head>
+<body>
+
+<!-- Search bar -->
+<div class="search-container">
+    <input type="text" id="searchInput" class="search-input" placeholder="Search player..." />
+</div>
+
+<h1>Cracked Tiers 1.20</h1>
+<div id="players-container" class="max-w-6xl mx-auto space-y-3"></div>
+
+<!-- Modal backdrop -->
+<div id="modal-backdrop"></div>
+
+<!-- Modal -->
+<div id="modal">
+    <span class="close-btn" onclick="closeModal()">×</span>
+    <h2 id="modalName"></h2>
+    <p id="modalRegion"></p>
+    <div class="gamemodes" id="modalGamemodes"></div>
+</div>
+
+<script>
+// Player data
+const players = [
+    { position: 1, name: "brainless100", region: "AS", gamemodes: { Axe: "HT2", Nethpot: "HT4", Mace: "HT3 Strong", Tank: "-", UHC: "-", Crystal: "-" } },
+    { position: 2, name: "Player2", region: "NA", gamemodes: { Axe: "-", Nethpot: "-", Mace: "-", Tank: "-", UHC: "-", Crystal: "-" } },
+    { position: 3, name: "Player3", region: "EU", gamemodes: { Axe: "-", Nethpot: "-", Mace: "-", Tank: "-", UHC: "-", Crystal: "-" } },
+    { position: 4, name: "Player4", region: "AS", gamemodes: { Axe: "-", Nethpot: "-", Mace: "-", Tank: "-", UHC: "-", Crystal: "-" } },
+    { position: 5, name: "Player5", region: "NA", gamemodes: { Axe: "-", Nethpot: "-", Mace: "-", Tank: "-", UHC: "-", Crystal: "-" } }
+];
+
+const gamemodeIcons = {
+    Axe: "icon/axe.png",
+    Nethpot: "icon/nethpot.png",
+    Mace: "icon/mace.png",
+    Tank: "icon/tank.png",
+    UHC: "icon/uhc.png",
+    Crystal: "icon/crystal.png"
+};
+
+const container = document.getElementById("players-container");
+players.forEach(player => {
+    const row = document.createElement("div");
+    row.className = "player-row";
+    if(player.position === 1) row.classList.add("top-1");
+    else if(player.position === 2) row.classList.add("top-2");
+    else if(player.position === 3) row.classList.add("top-3");
+    else if(player.position >=4 && player.position <=5) row.classList.add("next-players");
+
+    const left = document.createElement("div");
+    left.className = "player-info";
+    left.innerHTML = `
+        <div class="font-bold text-yellow-400">${player.position}.</div>
+        <img src="https://mc-heads.net/avatar/${player.name}/64" alt="${player.name}" class="skin">
+        <div class="player-name">
+            <div class="name">${player.name}</div>
+            <div class="region">${player.region}</div>
+        </div>
+    `;
+
+    const right = document.createElement("div");
+    right.className = "gamemodes";
+    for(const [mode, tier] of Object.entries(player.gamemodes)){
+        const gm = document.createElement("div");
+        gm.className = "gamemode-item";
+        gm.innerHTML = `
+            <img src="${gamemodeIcons[mode]}" alt="${mode}">
+            <span class="tier-badge">${tier}</span>
+        `;
+        right.appendChild(gm);
+    }
+
+    row.appendChild(left);
+    row.appendChild(right);
+    container.appendChild(row);
+});
+
+// Modal functionality
+const modal = document.getElementById("modal");
+const backdrop = document.getElementById("modal-backdrop");
+const modalName = document.getElementById("modalName");
+const modalRegion = document.getElementById("modalRegion");
+const modalGamemodes = document.getElementById("modalGamemodes");
+
+function openModal(player){
+    modalName.textContent = player.name;
+    modalRegion.textContent = "Region: " + player.region;
+    modalGamemodes.innerHTML = "";
+    for
