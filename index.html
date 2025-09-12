@@ -7,7 +7,7 @@
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.3/dist/tailwind.min.css" rel="stylesheet">
 <style>
 body {
-    background-color: #0f172a; 
+    background-color: #0f172a;
     font-family: 'Arial', sans-serif;
 }
 h1 {
@@ -40,6 +40,7 @@ h1 {
     padding: 10px 14px;
     border-radius: 12px;
     transition: transform 0.2s, box-shadow 0.4s;
+    cursor: pointer;
 }
 .player-row:hover {
     transform: scale(1.02);
@@ -130,13 +131,15 @@ h1 {
     padding: 20px;
     border-radius: 12px;
     z-index: 100;
-    width: 300px;
+    width: 320px;
     color: #fff;
     transition: transform 0.3s ease;
     box-shadow: 0 0 25px rgba(0,0,0,0.7);
 }
 #modal.active { transform: translate(-50%, -50%) scale(1); }
-#modal h2 { font-size: 1.2rem; font-weight: bold; margin-bottom: 10px; }
+#modal h2 { font-size: 1.4rem; font-weight: bold; margin-bottom: 6px; }
+#modal .region { font-size: 0.9rem; color: #cbd5e1; margin-bottom: 10px; }
+#modal .overall { background: #6366f1; padding: 4px 8px; border-radius: 6px; font-weight: bold; margin-bottom: 12px; display: inline-block; }
 #modal .close-btn {
     position: absolute;
     top: 8px;
@@ -144,6 +147,13 @@ h1 {
     cursor: pointer;
     font-weight: bold;
     font-size: 1.2rem;
+}
+#modal .modal-skin {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 3px solid gold;
+    margin-bottom: 8px;
 }
 </style>
 </head>
@@ -163,18 +173,20 @@ h1 {
 <!-- Modal -->
 <div id="modal">
     <span class="close-btn" onclick="closeModal()">×</span>
+    <img src="" alt="Skin" class="modal-skin" id="modalSkin">
     <h2 id="modalName"></h2>
-    <p id="modalRegion"></p>
+    <div class="region" id="modalRegion"></div>
+    <div class="overall" id="modalOverall"></div>
     <div class="gamemodes" id="modalGamemodes"></div>
 </div>
 
 <script>
 const players = [
-    { position: 1, name: "brainless100", region: "AS", gamemodes: { Axe: "HT2", Nethpot: "HT4", Mace: "HT3 Strong", Tank: "-", UHC: "-", Crystal: "-" } },
-    { position: 2, name: "GummyBearTheGOAT", region: "AS", gamemodes: { Axe: "LT3", Nethpot: "HT3", Mace: "-", Tank: "-", UHC: "LT3", Crystal: "-" } },
-    { position: 3, name: "Player3", region: "EU", gamemodes: { Axe: "-", Nethpot: "-", Mace: "-", Tank: "-", UHC: "-", Crystal: "-" } },
-    { position: 4, name: "Player4", region: "AS", gamemodes: { Axe: "-", Nethpot: "-", Mace: "-", Tank: "-", UHC: "-", Crystal: "-" } },
-    { position: 5, name: "Player5", region: "NA", gamemodes: { Axe: "-", Nethpot: "-", Mace: "-", Tank: "-", UHC: "-", Crystal: "-" } }
+    { position: 1, name: "brainless100", region: "AS", overall: 405, gamemodes: { Axe: "HT2", Nethpot: "HT4", Mace: "HT3 Strong", Tank: "-", UHC: "-", Crystal: "-" } },
+    { position: 2, name: "GummyBearTheGOAT", region: "AS", overall: 320, gamemodes: { Axe: "LT3", Nethpot: "HT3", Mace: "-", Tank: "-", UHC: "LT3", Crystal: "-" } },
+    { position: 3, name: "Player3", region: "EU", overall: 280, gamemodes: { Axe: "-", Nethpot: "-", Mace: "-", Tank: "-", UHC: "-", Crystal: "-" } },
+    { position: 4, name: "Player4", region: "AS", overall: 200, gamemodes: { Axe: "-", Nethpot: "-", Mace: "-", Tank: "-", UHC: "-", Crystal: "-" } },
+    { position: 5, name: "Player5", region: "NA", overall: 150, gamemodes: { Axe: "-", Nethpot: "-", Mace: "-", Tank: "-", UHC: "-", Crystal: "-" } }
 ];
 
 const gamemodeIcons = {
@@ -221,6 +233,9 @@ players.forEach(player => {
     row.appendChild(left);
     row.appendChild(right);
     container.appendChild(row);
+
+    // Click opens modal
+    row.addEventListener("click", () => openModal(player));
 });
 
 // Modal functionality
@@ -228,11 +243,15 @@ const modal = document.getElementById("modal");
 const backdrop = document.getElementById("modal-backdrop");
 const modalName = document.getElementById("modalName");
 const modalRegion = document.getElementById("modalRegion");
+const modalOverall = document.getElementById("modalOverall");
 const modalGamemodes = document.getElementById("modalGamemodes");
+const modalSkin = document.getElementById("modalSkin");
 
 function openModal(player){
+    modalSkin.src = `https://mc-heads.net/avatar/${player.name}/128`;
     modalName.textContent = player.name;
     modalRegion.textContent = "Region: " + player.region;
+    modalOverall.textContent = "Overall: " + player.overall + " points";
     modalGamemodes.innerHTML = "";
     for(const [mode, tier] of Object.entries(player.gamemodes)){
         const gm = document.createElement("div");
@@ -249,6 +268,7 @@ function closeModal(){
     backdrop.classList.remove("active");
 }
 
+// Search bar
 document.getElementById("searchInput").addEventListener("keypress", function(e){
     if(e.key === "Enter"){
         const name = e.target.value.trim();
