@@ -7,24 +7,10 @@
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.3/dist/tailwind.min.css" rel="stylesheet">
 <style>
 body {
-    background: radial-gradient(circle at top, #0f172a, #1e293b);
+    background-color: #0f172a; /* black background */
     font-family: 'Arial', sans-serif;
     overflow-x: hidden;
-    position: relative;
 }
-
-/* Optional: subtle stars */
-body::after {
-    content: "";
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%;
-    height: 100%;
-    background: url('https://i.ibb.co/9qjQf1G/stars.png') repeat;
-    opacity: 0.1;
-    pointer-events: none;
-}
-
 h1 {
     text-align: center;
     color: #fff;
@@ -99,11 +85,15 @@ h1 {
     width: 100%;
 }
 
-/* Top 1 player highlight */
+/* Highlights */
 .top-player {
     border: 3px solid gold;
     transform: scale(1.05);
     background: rgba(255,215,0,0.1);
+}
+.next-players {
+    border: 2px solid grey;
+    background: rgba(128,128,128,0.1);
 }
 </style>
 </head>
@@ -111,9 +101,7 @@ h1 {
 
 <h1>Cracked Tiers 1.20</h1>
 
-<div id="players-container" class="max-w-6xl mx-auto space-y-3">
-  <!-- Player rows will appear here -->
-</div>
+<div id="players-container" class="max-w-6xl mx-auto space-y-3"></div>
 
 <script>
 // Player data
@@ -122,16 +110,38 @@ const players = [
         position: 1,
         name: "brainless100",
         region: "AS",
-        gamemodes: {
-            Axe: "HT2",
-            Nethpot: "HT4",
-            Mace: "HT3 Strong",
-            Tank: "-",
-            UHC: "-",
-            Crystal: "HT1"
-        }
+        gamemodes: { Axe: "HT2", Nethpot: "HT4", Mace: "HT3 Strong", Tank: "-", UHC: "-", Crystal: "HT1" }
     },
-    // You can add more players here
+    {
+        position: 2,
+        name: "Player2",
+        region: "NA",
+        gamemodes: { Axe: "LT3", Nethpot: "LT4", Mace: "LT3 Weak", Tank: "-", UHC: "-", Crystal: "LT2" }
+    },
+    {
+        position: 3,
+        name: "Player3",
+        region: "EU",
+        gamemodes: { Axe: "HT1", Nethpot: "HT2", Mace: "LT3", Tank: "-", UHC: "-", Crystal: "LT1" }
+    },
+    {
+        position: 4,
+        name: "Player4",
+        region: "AS",
+        gamemodes: { Axe: "LT2", Nethpot: "HT1", Mace: "LT2", Tank: "-", UHC: "-", Crystal: "LT3" }
+    },
+    {
+        position: 5,
+        name: "Player5",
+        region: "NA",
+        gamemodes: { Axe: "LT1", Nethpot: "LT1", Mace: "LT2", Tank: "-", UHC: "-", Crystal: "LT2" }
+    },
+    {
+        position: 6,
+        name: "Player6",
+        region: "EU",
+        gamemodes: { Axe: "LT2", Nethpot: "LT3", Mace: "LT1", Tank: "-", UHC: "-", Crystal: "LT1" }
+    }
 ];
 
 // Icons (relative path)
@@ -150,10 +160,10 @@ players.forEach(player => {
     const row = document.createElement("div");
     row.className = "player-row";
 
-    // Highlight top 1 player
-    if(player.position === 1) {
-        row.classList.add("top-player");
-    }
+    // Highlight top 1
+    if(player.position === 1) row.classList.add("top-player");
+    // Highlight next 4–5
+    else if(player.position >= 2 && player.position <= 5) row.classList.add("next-players");
 
     // Left: position + skin + name + region
     const left = document.createElement("div");
