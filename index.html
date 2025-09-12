@@ -91,12 +91,12 @@ body {
 }
 .player-name .rank {
     font-size: 0.8rem;
-    color: #22c55e; /* green for ranks */
+    color: #22c55e;
     font-weight: bold;
 }
 .player-name .region {
     font-size: 0.8rem;
-    color: #f87171; /* red color for region */
+    color: #f87171;
     font-weight: bold;
     margin-left: 5px;
 }
@@ -104,9 +104,12 @@ body {
 /* Gamemodes */
 .gamemodes {
     display: flex;
+    flex-wrap: wrap; /* wrap karega next line me */
     gap: 12px;
-    overflow-x: auto;
+    overflow-x: hidden; /* horizontal scroll hat gaya */
 }
+
+/* Gamemode badges */
 .gamemode-item {
     display: flex;
     flex-direction: column;
@@ -213,14 +216,12 @@ const gamemodeIcons = {
     Crystal: "icon/crystal.png"
 };
 
-// Assign rank based on overall
 function getRank(points){
     if(points >= 350) return "Grand Master";
     else if(points >= 250) return "Combat Master";
     else return "Combat Ace";
 }
 
-// Create players
 const container = document.getElementById("players-container");
 players.forEach(player => {
     const row = document.createElement("div");
@@ -258,7 +259,6 @@ players.forEach(player => {
     row.addEventListener("click", () => openModal(player));
 });
 
-// Modal functions
 const modal = document.getElementById("modal");
 const backdrop = document.getElementById("modal-backdrop");
 const modalName = document.getElementById("modalName");
@@ -288,7 +288,6 @@ function closeModal(){
     backdrop.classList.remove("active");
 }
 
-// Search
 document.getElementById("searchInput").addEventListener("keypress", function(e){
     if(e.key === "Enter"){
         const name = e.target.value.trim();
