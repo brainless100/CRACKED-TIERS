@@ -339,4 +339,36 @@ const modalSkin = document.getElementById("modalSkin");
 
 function openModal(player){
     modalSkin.src = `https://mc-heads.net/avatar/${player.name}/128`;
-    modalName.textContent = player
+    modalName.textContent = player.name;
+    modalRegion.textContent = `[${player.region}]`;
+    modalOverall.textContent = "Overall: " + player.overall + " points";
+    modalGamemodes.innerHTML = "";
+    for(const [mode, tier] of Object.entries(player.gamemodes)){
+        const gm = document.createElement("div");
+        gm.className = "gamemode-item";
+        gm.innerHTML = `<img src="${gamemodeIcons[mode]}" alt="${mode}"><span class="tier-badge">${tier}</span>`;
+        modalGamemodes.appendChild(gm);
+    }
+    modal.classList.add("active");
+    backdrop.classList.add("active");
+}
+
+function closeModal(){
+    modal.classList.remove("active");
+    backdrop.classList.remove("active");
+}
+
+// Search functionality
+document.getElementById("searchInput").addEventListener("keypress", function(e){
+    if(e.key === "Enter"){
+        const name = e.target.value.trim();
+        const player = players.find(p => p.name.toLowerCase() === name.toLowerCase());
+        if(player) openModal(player);
+        else alert("Player not found!");
+        e.target.value = "";
+    }
+});
+</script>
+
+</body>
+</html>
