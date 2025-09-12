@@ -10,7 +10,7 @@ body {
     background-color: #0f172a;
     font-family: 'Arial', sans-serif;
     margin: 0;
-    padding-top: 80px; /* header ke liye space */
+    padding-top: 120px; /* header + filter bar space */
 }
 
 /* Top header */
@@ -48,6 +48,36 @@ body {
     color: #fff;
 }
 
+/* Filter Bar */
+.filter-bar {
+    position: fixed;
+    top: 60px; /* below header */
+    left: 0;
+    width: 100%;
+    background-color: rgba(15,23,42,0.95);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0;
+    z-index: 999;
+    flex-wrap: wrap;
+}
+.filter-item {
+    padding: 6px 12px;
+    border-radius: 10px;
+    background-color: #1e293b;
+    color: #facc15;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: transform 0.2s, background 0.3s;
+}
+.filter-item:hover { transform: scale(1.05); background-color: #3b82f6; }
+.filter-count { background: #f87171; border-radius: 50%; padding: 2px 6px; font-size: 0.75rem; color: #fff; }
+
 /* Player row */
 .player-row {
     display: flex;
@@ -58,6 +88,10 @@ body {
     border-radius: 12px;
     transition: transform 0.2s, box-shadow 0.4s;
     cursor: pointer;
+}
+.player-row.highlight {
+    box-shadow: 0 0 15px #facc15;
+    transform: scale(1.02);
 }
 .player-row:hover {
     transform: scale(1.02);
@@ -106,7 +140,7 @@ body {
     display: flex;
     flex-wrap: wrap; /* wrap karega next line me */
     gap: 12px;
-    overflow-x: hidden; /* horizontal scroll hat gaya */
+    overflow-x: hidden;
 }
 
 /* Gamemode badges */
@@ -185,6 +219,10 @@ body {
     </div>
 </div>
 
+<!-- Filter Bar -->
+<div class="filter-bar" id="filterBar"></div>
+
+<!-- Players Container -->
 <div id="players-container" class="max-w-6xl mx-auto space-y-3 mt-5"></div>
 
 <!-- Modal -->
@@ -208,6 +246,7 @@ const players = [
 ];
 
 const gamemodeIcons = {
+    Overall: "https://cdn-icons-png.flaticon.com/512/25/25694.png",
     Axe: "icon/axe.png",
     Nethpot: "icon/nethpot.png",
     Mace: "icon/mace.png",
@@ -220,6 +259,36 @@ function getRank(points){
     if(points >= 350) return "Grand Master";
     else if(points >= 250) return "Combat Master";
     else return "Combat Ace";
+}
+
+// Render filter bar
+const filterBar = document.getElementById("filterBar");
+const modes = ["Overall", "Axe", "Nethpot", "Mace", "Tank", "UHC", "Crystal"];
+modes.forEach(mode=>{
+    const count = players.filter(p=>{
+        if(mode==="Overall") return true;
+        return p.gamemodes[mode] && p.gamemodes[mode]!=="-";
+    }).length;
+    const div = document.createElement("div");
+    div.className = "filter-item";
+    div.innerHTML = `${mode} <span class="filter-count">${count}</span>`;
+    div.addEventListener("click", ()=>highlightTop(mode));
+    filterBar.appendChild(div);
+});
+
+// Highlight top players by mode
+function highlightTop(mode){
+    document.querySelectorAll(".player-row").forEach(row=>row.classList.remove("highlight"));
+    let sorted;
+    if(mode==="Overall"){
+        sorted = [...players].sort((a,b)=>b.overall - a.overall);
+    }else{
+        sorted = [...players].filter(p=>p.gamemodes[mode]!=="-");
+    }
+    sorted.slice(0,3).forEach(p=>{
+        const row = Array.from(document.querySelectorAll(".player-row")).find(r=>r.querySelector(".name").textContent.includes(p.name));
+        if(row) row.classList.add("highlight");
+    });
 }
 
 const container = document.getElementById("players-container");
@@ -259,6 +328,7 @@ players.forEach(player => {
     row.addEventListener("click", () => openModal(player));
 });
 
+// Modal functions
 const modal = document.getElementById("modal");
 const backdrop = document.getElementById("modal-backdrop");
 const modalName = document.getElementById("modalName");
@@ -269,35 +339,4 @@ const modalSkin = document.getElementById("modalSkin");
 
 function openModal(player){
     modalSkin.src = `https://mc-heads.net/avatar/${player.name}/128`;
-    modalName.textContent = player.name;
-    modalRegion.textContent = "Region: " + player.region;
-    modalOverall.textContent = "Overall: " + player.overall + " points";
-    modalGamemodes.innerHTML = "";
-    for(const [mode, tier] of Object.entries(player.gamemodes)){
-        const gm = document.createElement("div");
-        gm.className = "gamemode-item";
-        gm.innerHTML = `<img src="${gamemodeIcons[mode]}" alt="${mode}"><span class="tier-badge">${tier}</span>`;
-        modalGamemodes.appendChild(gm);
-    }
-    modal.classList.add("active");
-    backdrop.classList.add("active");
-}
-
-function closeModal(){
-    modal.classList.remove("active");
-    backdrop.classList.remove("active");
-}
-
-document.getElementById("searchInput").addEventListener("keypress", function(e){
-    if(e.key === "Enter"){
-        const name = e.target.value.trim();
-        const player = players.find(p => p.name.toLowerCase() === name.toLowerCase());
-        if(player) openModal(player);
-        else alert("Player not found!");
-        e.target.value = "";
-    }
-});
-</script>
-
-</body>
-</html>
+    modalName.textContent = player
