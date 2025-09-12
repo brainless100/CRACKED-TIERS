@@ -7,7 +7,7 @@
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.3/dist/tailwind.min.css" rel="stylesheet">
 <style>
 body {
-    background-color: #0f172a;
+    background-color: #0f172a; /* black background */
     font-family: 'Arial', sans-serif;
     overflow-x: hidden;
 }
@@ -25,11 +25,11 @@ h1 {
     background-color: rgba(15,23,42,0.75);
     padding: 10px 14px;
     border-radius: 12px;
-    transition: transform 0.2s, box-shadow 0.3s;
+    transition: transform 0.2s, box-shadow 0.4s;
 }
 .player-row:hover {
     transform: scale(1.02);
-    background-color: rgba(99,102,241,0.2);
+    box-shadow: 0 0 20px rgba(99,102,241,0.3);
 }
 .player-info {
     display: flex;
@@ -72,7 +72,6 @@ h1 {
     height: 48px;
     margin-bottom: 2px;
     object-fit: contain;
-    image-rendering: auto;
 }
 .tier-badge {
     background-color: #1e293b;
@@ -85,27 +84,16 @@ h1 {
     width: 100%;
 }
 
-/* Highlights & animations */
-@keyframes glow {
-    0% { box-shadow: 0 0 5px #fff; }
-    50% { box-shadow: 0 0 20px #fff; }
-    100% { box-shadow: 0 0 5px #fff; }
+/* Professional glow animation */
+@keyframes proGlow {
+    0% { box-shadow: 0 0 8px rgba(255,255,255,0.2); }
+    50% { box-shadow: 0 0 16px rgba(255,255,255,0.5); }
+    100% { box-shadow: 0 0 8px rgba(255,255,255,0.2); }
 }
-.top-1 { border: 3px solid gold; animation: glow 1.5s infinite; background: rgba(255,215,0,0.1); }
-.top-2 { border: 3px solid silver; animation: glow 1.5s infinite; background: rgba(192,192,192,0.1); }
-.top-3 { border: 3px solid #cd7f32; animation: glow 1.5s infinite; background: rgba(205,127,50,0.1); }
+.top-1 { border: 3px solid gold; animation: proGlow 1.5s infinite; }
+.top-2 { border: 3px solid silver; animation: proGlow 1.5s infinite; }
+.top-3 { border: 3px solid #cd7f32; animation: proGlow 1.5s infinite; }
 .next-players { border: 2px solid grey; background: rgba(128,128,128,0.1); }
-
-/* Tier colors */
-.tier-HT5 { background-color: #ff4d4d; color: #fff; }
-.tier-HT4 { background-color: #ff944d; color: #fff; }
-.tier-HT3 { background-color: #ffd24d; color: #000; }
-.tier-HT2 { background-color: #4dff4d; color: #000; }
-.tier-HT1 { background-color: #4dd2ff; color: #000; }
-.tier-LT4 { background-color: #a366ff; color: #fff; }
-.tier-LT3 { background-color: #ff66b3; color: #fff; }
-.tier-LT2 { background-color: #ff99ff; color: #000; }
-.tier-LT1 { background-color: #b3b3b3; color: #000; }
 </style>
 </head>
 <body>
@@ -116,12 +104,12 @@ h1 {
 <script>
 // Player data
 const players = [
-    { position: 1, name: "brainless100", region: "AS", gamemodes: { Axe: "HT2", Nethpot: "HT4", Mace: "HT3 Strong", Tank: "-", UHC: "-", Crystal: "HT1" } },
-    { position: 2, name: "Player2", region: "NA", gamemodes: { Axe: "HT1", Nethpot: "HT3", Mace: "HT2", Tank: "-", UHC: "-", Crystal: "LT4" } },
-    { position: 3, name: "Player3", region: "EU", gamemodes: { Axe: "HT3", Nethpot: "HT4", Mace: "HT1", Tank: "-", UHC: "-", Crystal: "HT2" } },
-    { position: 4, name: "Player4", region: "AS", gamemodes: { Axe: "LT3", Nethpot: "LT4", Mace: "LT2", Tank: "-", UHC: "-", Crystal: "LT2" } },
-    { position: 5, name: "Player5", region: "NA", gamemodes: { Axe: "LT2", Nethpot: "LT3", Mace: "LT1", Tank: "-", UHC: "-", Crystal: "LT1" } },
-    { position: 6, name: "Player6", region: "EU", gamemodes: { Axe: "LT1", Nethpot: "LT2", Mace: "LT1", Tank: "-", UHC: "-", Crystal: "LT1" } }
+    { position: 1, name: "brainless100", region: "AS", gamemodes: { Axe: "-", Nethpot: "-", Mace: "-", Tank: "-", UHC: "-", Crystal: "-" } },
+    { position: 2, name: "Player2", region: "NA", gamemodes: { Axe: "-", Nethpot: "-", Mace: "-", Tank: "-", UHC: "-", Crystal: "-" } },
+    { position: 3, name: "Player3", region: "EU", gamemodes: { Axe: "-", Nethpot: "-", Mace: "-", Tank: "-", UHC: "-", Crystal: "-" } },
+    { position: 4, name: "Player4", region: "AS", gamemodes: { Axe: "-", Nethpot: "-", Mace: "-", Tank: "-", UHC: "-", Crystal: "-" } },
+    { position: 5, name: "Player5", region: "NA", gamemodes: { Axe: "-", Nethpot: "-", Mace: "-", Tank: "-", UHC: "-", Crystal: "-" } },
+    { position: 6, name: "Player6", region: "EU", gamemodes: { Axe: "-", Nethpot: "-", Mace: "-", Tank: "-", UHC: "-", Crystal: "-" } }
 ];
 
 // Gamemode icons (relative path)
@@ -140,7 +128,7 @@ players.forEach(player => {
     const row = document.createElement("div");
     row.className = "player-row";
 
-    // Highlight top players
+    // Top 3 professional glow
     if(player.position === 1) row.classList.add("top-1");
     else if(player.position === 2) row.classList.add("top-2");
     else if(player.position === 3) row.classList.add("top-3");
@@ -158,17 +146,16 @@ players.forEach(player => {
         </div>
     `;
 
-    // Right: gamemodes + tier badges
+    // Right: gamemodes + tier badges (all -)
     const right = document.createElement("div");
     right.className = "gamemodes";
 
     for(const [mode, tier] of Object.entries(player.gamemodes)){
-        const tierClass = tier.replace(/\s+/g,'').split('-')[0]; // "HT3" from "HT3 Strong"
         const gm = document.createElement("div");
         gm.className = "gamemode-item";
         gm.innerHTML = `
             <img src="${gamemodeIcons[mode]}" alt="${mode}">
-            <span class="tier-badge tier-${tierClass}">${tier}</span>
+            <span class="tier-badge">${tier}</span>
         `;
         right.appendChild(gm);
     }
