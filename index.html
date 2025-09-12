@@ -9,6 +9,8 @@
 body {
     background-color: #0f172a;
     font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding-top: 80px; /* search bar height + gap */
 }
 h1 {
     text-align: center;
@@ -17,18 +19,24 @@ h1 {
     margin: 20px 0;
     text-shadow: 2px 2px 6px rgba(0,0,0,0.5);
 }
+
+/* Sticky Search Bar */
 .search-container {
     position: fixed;
     top: 20px;
-    right: 20px;
-    z-index: 50;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
 }
 .search-input {
-    padding: 6px 10px;
-    border-radius: 8px;
+    padding: 8px 12px;
+    border-radius: 10px;
     border: none;
     outline: none;
     font-size: 1rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    background-color: #1e293b;
+    color: #fff;
 }
 
 /* Player row */
@@ -116,7 +124,7 @@ h1 {
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.3s ease;
-    z-index: 90;
+    z-index: 900;
 }
 #modal-backdrop.active {
     opacity: 1;
@@ -130,7 +138,7 @@ h1 {
     background-color: #1e293b;
     padding: 20px;
     border-radius: 12px;
-    z-index: 100;
+    z-index: 1000;
     width: 320px;
     color: #fff;
     transition: transform 0.3s ease;
@@ -181,6 +189,7 @@ h1 {
 </div>
 
 <script>
+// Player data
 const players = [
     { position: 1, name: "brainless100", region: "AS", overall: 405, gamemodes: { Axe: "HT2", Nethpot: "HT4", Mace: "HT3 Strong", Tank: "-", UHC: "-", Crystal: "-" } },
     { position: 2, name: "GummyBearTheGOAT", region: "AS", overall: 320, gamemodes: { Axe: "LT3", Nethpot: "HT3", Mace: "-", Tank: "-", UHC: "LT3", Crystal: "-" } },
@@ -198,6 +207,7 @@ const gamemodeIcons = {
     Crystal: "icon/crystal.png"
 };
 
+// Generate players
 const container = document.getElementById("players-container");
 players.forEach(player => {
     const row = document.createElement("div");
@@ -205,7 +215,7 @@ players.forEach(player => {
     if(player.position === 1) row.classList.add("top-1");
     else if(player.position === 2) row.classList.add("top-2");
     else if(player.position === 3) row.classList.add("top-3");
-    else if(player.position >=4 && player.position <=5) row.classList.add("next-players");
+    else row.classList.add("next-players");
 
     const left = document.createElement("div");
     left.className = "player-info";
@@ -223,10 +233,7 @@ players.forEach(player => {
     for(const [mode, tier] of Object.entries(player.gamemodes)){
         const gm = document.createElement("div");
         gm.className = "gamemode-item";
-        gm.innerHTML = `
-            <img src="${gamemodeIcons[mode]}" alt="${mode}">
-            <span class="tier-badge">${tier}</span>
-        `;
+        gm.innerHTML = `<img src="${gamemodeIcons[mode]}" alt="${mode}"><span class="tier-badge">${tier}</span>`;
         right.appendChild(gm);
     }
 
@@ -234,11 +241,10 @@ players.forEach(player => {
     row.appendChild(right);
     container.appendChild(row);
 
-    // Click opens modal
     row.addEventListener("click", () => openModal(player));
 });
 
-// Modal functionality
+// Modal
 const modal = document.getElementById("modal");
 const backdrop = document.getElementById("modal-backdrop");
 const modalName = document.getElementById("modalName");
@@ -268,7 +274,7 @@ function closeModal(){
     backdrop.classList.remove("active");
 }
 
-// Search bar
+// Search bar functionality
 document.getElementById("searchInput").addEventListener("keypress", function(e){
     if(e.key === "Enter"){
         const name = e.target.value.trim();
