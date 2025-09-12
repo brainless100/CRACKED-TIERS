@@ -1,161 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cracked Tiers 1.20</title>
-<link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.3/dist/tailwind.min.css" rel="stylesheet">
-<style>
-body {
-    background: linear-gradient(to bottom, #0f172a, #1e293b);
-    font-family: 'Arial', sans-serif;
-}
-h1 {
-    text-align: center;
-    color: #fff;
-    font-size: 2rem;
-    margin: 20px 0;
-}
-.player-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: rgba(15,23,42,0.75);
-    padding: 10px 15px;
-    border-radius: 12px;
-    transition: transform 0.2s, background-color 0.2s;
-}
-.player-row:hover {
-    transform: scale(1.02);
-    background-color: rgba(99,102,241,0.2);
-}
-.player-info {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    min-width: 250px;
-}
+/* Skin */
 .player-info img.skin {
     width: 96px;
     height: 96px;
     border-radius: 50%;
     border: 2px solid #6366f1;
+    image-rendering: auto; /* ensures smooth scaling */
 }
-.player-name {
-    display: flex;
-    flex-direction: column;
-}
-.player-name .name {
-    font-weight: bold;
-    font-size: 1.1rem;
-    color: #facc15;
-}
-.player-name .region {
-    font-size: 0.9rem;
-    color: #cbd5e1;
-}
-.gamemodes {
-    display: flex;
-    gap: 16px;
-    overflow-x: auto;
-}
-.gamemode-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-width: 70px;
-}
+
+/* Gamemode icons */
 .gamemode-item img {
     width: 64px;
     height: 64px;
     margin-bottom: 3px;
-    object-fit: contain;
+    object-fit: contain; /* maintains quality without stretching */
+    image-rendering: auto; /* smooth */
 }
-.tier-badge {
-    background-color: #1e293b;
-    color: #f8fafc;
-    padding: 3px 6px;
-    border-radius: 6px;
-    font-size: 0.85rem;
-    text-align: center;
-    font-weight: 600;
-    width: 100%;
-}
-</style>
-</head>
-<body>
-
-<h1>Cracked Tiers 1.20</h1>
-
-<div id="players-container" class="max-w-6xl mx-auto space-y-3">
-  <!-- Player rows go here -->
-</div>
-
-<script>
-// Player data
-const players = [
-    {
-        position: 1,
-        name: "brainless100",
-        region: "AS",
-        gamemodes: {
-            Axe: "HT2",
-            Nethpot: "HT4",
-            Mace: "HT3 Strong",
-            Tank: "-",
-            UHC: "-",
-            Crystal: "HT1"
-        }
-    }
-];
-
-// Icons (relative path)
-const gamemodeIcons = {
-    Axe: "icon/axe.png",
-    Nethpot: "icon/nethpot.png",
-    Mace: "icon/mace.png",
-    Tank: "icon/tank.png",
-    UHC: "icon/uhc.png",
-    Crystal: "icon/crystal.png"
-};
-
-const container = document.getElementById("players-container");
-
-players.forEach(player => {
-    const row = document.createElement("div");
-    row.className = "player-row";
-
-    // Left side: position + skin + name + region
-    const left = document.createElement("div");
-    left.className = "player-info";
-    left.innerHTML = `
-        <div class="font-bold text-yellow-400">${player.position}.</div>
-        <img src="https://mc-heads.net/avatar/${player.name}/96" alt="${player.name}" class="skin">
-        <div class="player-name">
-            <div class="name">${player.name}</div>
-            <div class="region">${player.region}</div>
-        </div>
-    `;
-
-    // Right side: gamemodes + tiers
-    const right = document.createElement("div");
-    right.className = "gamemodes";
-
-    for(const [mode, tier] of Object.entries(player.gamemodes)){
-        const gm = document.createElement("div");
-        gm.className = "gamemode-item";
-        gm.innerHTML = `
-            <img src="${gamemodeIcons[mode]}" alt="${mode}">
-            <span class="tier-badge">${tier}</span>
-        `;
-        right.appendChild(gm);
-    }
-
-    row.appendChild(left);
-    row.appendChild(right);
-    container.appendChild(row);
-});
-</script>
-
-</body>
-</html>
