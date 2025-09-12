@@ -136,7 +136,6 @@ body {
     display: flex;
     flex-wrap: wrap;
     gap: 12px;
-    overflow-x: hidden;
 }
 .gamemode-item {
     display: flex;
@@ -231,8 +230,9 @@ body {
 </div>
 
 <script>
+// Players Data
 const players = [
-    { position: 1, name: "brainless100", region: "AS", overall: 405, gamemodes: { Axe: "HT2", Nethpot: "HT4", Mace: "HT3", Tank: "-", UHC: "-", Crystal: "-" } },
+    { position: 1, name: "brainless100", region: "AS", overall: 405, gamemodes: { Axe: "HT2", Nethpot: "HT4", Mace: "HT3 Strong", Tank: "-", UHC: "-", Crystal: "-" } },
     { position: 2, name: "GummyBearTheGOAT", region: "AS", overall: 320, gamemodes: { Axe: "LT3", Nethpot: "HT3", Mace: "-", Tank: "-", UHC: "LT3", Crystal: "-" } },
     { position: 3, name: "Player3", region: "EU", overall: 280, gamemodes: { Axe: "-", Nethpot: "-", Mace: "-", Tank: "-", UHC: "-", Crystal: "-" } },
     { position: 4, name: "Player4", region: "AS", overall: 200, gamemodes: { Axe: "-", Nethpot: "-", Mace: "-", Tank: "-", UHC: "-", Crystal: "-" } },
@@ -240,7 +240,7 @@ const players = [
 ];
 
 const gamemodeIcons = {
-    Overall: "https://cdn-icons-png.flaticon.com/512/25/25694.png",
+    Overall: "https://cdn-icons-png.flaticon.com/128/25/25231.png",
     Axe: "icon/axe.png",
     Nethpot: "icon/nethpot.png",
     Mace: "icon/mace.png",
@@ -251,38 +251,33 @@ const gamemodeIcons = {
 
 const container = document.getElementById("players-container");
 const filterBar = document.getElementById("filterBar");
+const filters = ["Overall","Axe","Nethpot","Mace","Tank","UHC","Crystal"];
 
-// Create filter buttons
-const filters = ["Overall", "Axe","Nethpot","Mace","Tank","UHC","Crystal"];
+// Create filter buttons with counts
 filters.forEach(f => {
     const btn = document.createElement("div");
     btn.className = "filter-item";
     btn.id = "filter-" + f;
-    btn.innerHTML = `${f} <span class="filter-count">0</span>`;
+    let count = players.filter(p => f==="Overall" ? true : (p.gamemodes[f]!=="-")).length;
+    btn.innerHTML = `${f} <span class="filter-count">${count}</span>`;
     btn.addEventListener("click", () => filterLeaderboard(f));
     filterBar.appendChild(btn);
 });
 
-// Calculate player count per gamemode
-filters.forEach(f => {
-    let count = players.filter(p => p.gamemodes[f] && p.gamemodes[f] !== "-").length;
-    document.querySelector("#filter-" + f + " .filter-count").textContent = count;
-});
-
 // Render leaderboard
-function renderLeaderboard(selectedMode = "Overall"){
+function renderLeaderboard(selectedMode="Overall"){
     container.innerHTML = "";
     let list = [...players];
-    if(selectedMode !== "Overall"){
-        // Filter players with valid tier in this mode
-        list = list.filter(p => p.gamemodes[selectedMode] && p.gamemodes[selectedMode] !== "-");
-        // Optional: sort descending if needed
-    } else {
-        // Sort by overall points
+    if(selectedMode==="Overall"){
         list.sort((a,b)=>b.overall - a.overall);
+    } else {
+        // Highlight players with this mode only
+        list.forEach(p => {
+            p.highlightMode = p.gamemodes[selectedMode]!=="-";
+        });
     }
 
-    list.forEach((player, idx) => {
+    list.forEach((player,idx) => {
         const row = document.createElement("div");
         row.className = "player-row";
         if(idx===0) row.classList.add("top-1");
@@ -290,17 +285,16 @@ function renderLeaderboard(selectedMode = "Overall"){
         else if(idx===2) row.classList.add("top-3");
         else row.classList.add("next-players");
 
+        if(selectedMode!=="Overall" && player.highlightMode) row.classList.add("highlight");
+
         const left = document.createElement("div");
         left.className = "player-info";
-        let tierText = selectedMode==="Overall" ? player.overall : player.gamemodes[selectedMode];
-        let rankText = "";
-        if(selectedMode==="Overall"){
-            if(player.overall >= 400) rankText="Grand Master";
-            else if(player.overall >=250) rankText="Combat Master";
-            else rankText="Combat Ace";
-        } else {
-            rankText=tierText;
-        }
+
+        // Rank text
+        let rankText = selectedMode==="Overall" ? 
+            (player.overall>=400?"Grand Master":player.overall>=250?"Combat Master":"Combat Ace") 
+            : player.gamemodes[selectedMode];
+
         left.innerHTML = `
             <div class="font-bold text-yellow-400">${player.position}.</div>
             <img src="https://mc-heads.net/avatar/${player.name}/64" alt="${player.name}" class="skin">
@@ -313,10 +307,10 @@ function renderLeaderboard(selectedMode = "Overall"){
 
         const right = document.createElement("div");
         right.className = "gamemodes";
-        if(selectedMode!=="Overall"){
+        for(const [mode,tier] of Object.entries(player.gamemodes)){
             const gm = document.createElement("div");
             gm.className = "gamemode-item";
-            gm.innerHTML = `<img src="${gamemodeIcons[selectedMode]}" alt="${selectedMode}"><span class="tier-badge">${player.gamemodes[selectedMode]}</span>`;
+            gm.innerHTML = `<img src="${gamemodeIcons[mode]}" alt="${mode}"><span class="tier-badge">${tier}</span>`;
             right.appendChild(gm);
         }
 
@@ -324,7 +318,7 @@ function renderLeaderboard(selectedMode = "Overall"){
         row.appendChild(right);
         container.appendChild(row);
 
-        row.addEventListener("click", () => openModal(player));
+        row.addEventListener("click",()=>openModal(player));
     });
 }
 
@@ -351,7 +345,7 @@ function openModal(player){
     modalRegion.textContent = `[${player.region}]`;
     modalOverall.textContent = "Overall: " + player.overall + " points";
     modalGamemodes.innerHTML = "";
-    for(const [mode, tier] of Object.entries(player.gamemodes)){
+    for(const [mode,tier] of Object.entries(player.gamemodes)){
         const gm = document.createElement("div");
         gm.className = "gamemode-item";
         gm.innerHTML = `<img src="${gamemodeIcons[mode]}" alt="${mode}"><span class="tier-badge">${tier}</span>`;
@@ -360,23 +354,21 @@ function openModal(player){
     modal.classList.add("active");
     backdrop.classList.add("active");
 }
-
 function closeModal(){
     modal.classList.remove("active");
     backdrop.classList.remove("active");
 }
 
 // Search
-document.getElementById("searchInput").addEventListener("keypress", function(e){
+document.getElementById("searchInput").addEventListener("keypress",function(e){
     if(e.key==="Enter"){
         const name = e.target.value.trim();
-        const player = players.find(p => p.name.toLowerCase()===name.toLowerCase());
+        const player = players.find(p=>p.name.toLowerCase()===name.toLowerCase());
         if(player) openModal(player);
         else alert("Player not found!");
         e.target.value="";
     }
 });
 </script>
-
 </body>
 </html>
