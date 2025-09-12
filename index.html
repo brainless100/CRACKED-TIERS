@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cracked Tiers</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.3/dist/tailwind.min.css" rel="stylesheet">
+<style>
+  body {
+    background: linear-gradient(to bottom, #0f172a, #1e293b);
+    font-family: 'Arial', sans-serif;
+  }
+
+  h1 {
+    text-align: center;
+    font-size: 2rem;
+    color: #fff;
+    margin-bottom: 1rem;
+  }
+
+  .player-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: rgba(15,23,42,0.6);
+    padding: 6px 10px;
+    border-radius: 10px;
+    transition: transform 0.2s;
+  }
+
+  .player-row:hover {
+    transform: scale(1.02);
+  }
+
+  .player-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 220px;
+  }
+
+  .gamemodes {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+  }
+
+  .gamemode-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .tier-badge {
+    background: #1e293b;
+    color: #f8fafc;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    min-width: 50px;
+    text-align: center;
+    font-weight: 600;
+  }
+
+  img.skin {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    border: 2px solid #6366f1;
+  }
+
+  img.gamemode-icon {
+    width: 48px;
+    height: 48px;
+  }
+</style>
+</head>
+<body class="p-4 min-h-screen">
+
+<h1>Cracked Tiers 1.20</h1>
+
+<div id="players-container" class="space-y-2 max-w-6xl mx-auto">
+  <!-- Player row will be inserted here -->
+</div>
+
+<script>
+// Player data
+const players = [
+  {
+    position: 1,
+    name: "brainless100",
+    region: "AS",
+    gamemodes: {
+      Axe:"HT2",
+      Nethpot:"HT4",
+      Mace:"HT3 Strong",
+      Tank:"-",
+      UHC:"-",
+      Crystal:"HT1"
+    }
+  }
+];
+
+// Custom gamemode icons using GitHub raw links
+const gamemodeIcons = {
+  Axe: "https://raw.githubusercontent.com/brainless100/CRACKED-TIERS-1.9-/main/icon/axe.png",
+  Nethpot: "https://raw.githubusercontent.com/brainless100/CRACKED-TIERS-1.9-/main/icon/nethpot.png",
+  Mace: "https://raw.githubusercontent.com/brainless100/CRACKED-TIERS-1.9-/main/icon/mace.png",
+  Tank: "https://raw.githubusercontent.com/brainless100/CRACKED-TIERS-1.9-/main/icon/tank.png",
+  UHC: "https://raw.githubusercontent.com/brainless100/CRACKED-TIERS-1.9-/main/icon/uhc.png",
+  Crystal: "https://raw.githubusercontent.com/brainless100/CRACKED-TIERS-1.9-/main/icon/crystal.png"
+};
+
+const container = document.getElementById("players-container");
+
+players.forEach(player => {
+  const row = document.createElement("div");
+  row.className = "player-row";
+
+  const left = document.createElement("div");
+  left.className = "player-info";
+  left.innerHTML = `
+    <div class="font-bold text-yellow-400 text-base">${player.position}.</div>
+    <img src="https://mc-heads.net/avatar/${player.name}/64" alt="${player.name}" class="skin">
+    <div>
+      <div class="text-white font-semibold text-sm">${player.name}</div>
+      <div class="text-slate-300 text-xs">${player.region}</div>
+    </div>
+  `;
+
+  const right = document.createElement("div");
+  right.className = "gamemodes";
+
+  for(const [mode, tier] of Object.entries(player.gamemodes)){
+    const gm = document.createElement("div");
+    gm.className = "gamemode-item";
+    gm.innerHTML = `
+      <img src="${gamemodeIcons[mode]}" alt="${mode}" class="gamemode-icon">
+      <span class="tier-badge">${tier}</span>
+    `;
+    right.appendChild(gm);
+  }
+
+  row.appendChild(left);
+  row.appendChild(right);
+  container.appendChild(row);
+});
+</script>
+
+</body>
+</html>
