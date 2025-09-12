@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cracked Tiers</title>
+<title>Cracked Tiers 1.20</title>
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.3/dist/tailwind.min.css" rel="stylesheet">
 <style>
 body {
@@ -104,12 +104,11 @@ h1 {
 <script>
 // Player data
 const players = [
-    { position: 1, name: "brainless100", region: "AS", gamemodes: { Axe: "-", Nethpot: "-", Mace: "-", Tank: "-", UHC: "-", Crystal: "-" } },
+    { position: 1, name: "brainless100", region: "AS", gamemodes: { Axe: "HT2", Nethpot: "HT4", Mace: "HT3 Strong", Tank: "-", UHC: "-", Crystal: "-" } },
     { position: 2, name: "Player2", region: "NA", gamemodes: { Axe: "-", Nethpot: "-", Mace: "-", Tank: "-", UHC: "-", Crystal: "-" } },
     { position: 3, name: "Player3", region: "EU", gamemodes: { Axe: "-", Nethpot: "-", Mace: "-", Tank: "-", UHC: "-", Crystal: "-" } },
     { position: 4, name: "Player4", region: "AS", gamemodes: { Axe: "-", Nethpot: "-", Mace: "-", Tank: "-", UHC: "-", Crystal: "-" } },
-    { position: 5, name: "Player5", region: "NA", gamemodes: { Axe: "-", Nethpot: "-", Mace: "-", Tank: "-", UHC: "-", Crystal: "-" } },
-    { position: 6, name: "Player6", region: "EU", gamemodes: { Axe: "-", Nethpot: "-", Mace: "-", Tank: "-", UHC: "-", Crystal: "-" } }
+    { position: 5, name: "Player5", region: "NA", gamemodes: { Axe: "-", Nethpot: "-", Mace: "-", Tank: "-", UHC: "-", Crystal: "-" } }
 ];
 
 // Gamemode icons (relative path)
@@ -146,7 +145,7 @@ players.forEach(player => {
         </div>
     `;
 
-    // Right: gamemodes + tier badges (all -)
+    // Right: gamemodes + tier badges
     const right = document.createElement("div");
     right.className = "gamemodes";
 
@@ -168,4 +167,3 @@ players.forEach(player => {
 
 </body>
 </html>
-
