@@ -10,26 +10,38 @@ body {
     background-color: #0f172a;
     font-family: 'Arial', sans-serif;
     margin: 0;
-    padding-top: 80px; /* search bar height + gap */
+    padding-top: 80px; /* optional spacing for content below fixed header */
 }
-h1 {
-    text-align: center;
-    color: #fff;
-    font-size: 2.5rem;
-    margin: 20px 0;
+
+/* Top header container */
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgba(15,23,42,0.95);
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+/* Logo */
+.logo {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #facc15;
     text-shadow: 2px 2px 6px rgba(0,0,0,0.5);
 }
 
-/* Sticky Search Bar */
+/* Search bar */
 .search-container {
-    position: fixed;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 1000;
+    /* Already inside header, so flex-end */
 }
 .search-input {
-    padding: 8px 12px;
+    padding: 6px 12px;
     border-radius: 10px;
     border: none;
     outline: none;
@@ -167,13 +179,15 @@ h1 {
 </head>
 <body>
 
-<!-- Search bar -->
-<div class="search-container">
-    <input type="text" id="searchInput" class="search-input" placeholder="Search player..." />
+<!-- Top Header -->
+<div class="header">
+    <div class="logo">Cracked Tiers</div>
+    <div class="search-container">
+        <input type="text" id="searchInput" class="search-input" placeholder="Search player..." />
+    </div>
 </div>
 
-<h1>Cracked Tiers 1.20</h1>
-<div id="players-container" class="max-w-6xl mx-auto space-y-3"></div>
+<div id="players-container" class="max-w-6xl mx-auto space-y-3 mt-5"></div>
 
 <!-- Modal backdrop -->
 <div id="modal-backdrop"></div>
