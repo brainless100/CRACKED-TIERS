@@ -6,11 +6,13 @@
 <title>Cracked Tiers 1.20</title>
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.3/dist/tailwind.min.css" rel="stylesheet">
 <style>
-body {
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-y: hidden; /* Pure page ka scroll hata diya */
     background-color: #0f172a;
     font-family: 'Arial', sans-serif;
-    margin: 0;
-    padding-top: 120px; /* space for header + filter bar */
 }
 
 /* Header */
@@ -73,6 +75,17 @@ body {
 }
 .filter-item:hover { transform: scale(1.05); background-color: #3b82f6; }
 .filter-count { background: #f87171; border-radius: 50%; padding: 2px 6px; font-size: 0.75rem; color: #fff; }
+
+/* Players Container */
+#players-container {
+    position: absolute;
+    top: 120px; /* header + filter bar ke neeche se start */
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow-y: auto; /* sirf yaha scroll hoga */
+    padding: 10px;
+}
 
 /* Player row */
 .player-row {
@@ -216,7 +229,7 @@ body {
 <div class="filter-bar" id="filterBar"></div>
 
 <!-- Players Container -->
-<div id="players-container" class="max-w-6xl mx-auto space-y-3 mt-5"></div>
+<div id="players-container" class="max-w-6xl mx-auto space-y-3"></div>
 
 <!-- Modal -->
 <div id="modal-backdrop"></div>
