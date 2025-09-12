@@ -99,7 +99,7 @@ h1 {
     width: 100%;
 }
 
-/* Glow */
+/* Glow animation */
 @keyframes proGlow {0% {box-shadow:0 0 8px rgba(255,255,255,0.2);}50% {box-shadow:0 0 16px rgba(255,255,255,0.5);}100% {box-shadow:0 0 8px rgba(255,255,255,0.2);}}
 .top-1 { border: 3px solid gold; animation: proGlow 1.5s infinite; }
 .top-2 { border: 3px solid silver; animation: proGlow 1.5s infinite; }
@@ -159,7 +159,6 @@ h1 {
 </head>
 <body>
 
-<!-- Search bar -->
 <div class="search-container">
     <input type="text" id="searchInput" class="search-input" placeholder="Search player..." />
 </div>
@@ -167,10 +166,8 @@ h1 {
 <h1>Cracked Tiers 1.20</h1>
 <div id="players-container" class="max-w-6xl mx-auto space-y-3"></div>
 
-<!-- Modal backdrop -->
-<div id="modal-backdrop"></div>
-
 <!-- Modal -->
+<div id="modal-backdrop"></div>
 <div id="modal">
     <span class="close-btn" onclick="closeModal()">×</span>
     <img src="" alt="Skin" class="modal-skin" id="modalSkin">
@@ -199,13 +196,14 @@ const gamemodeIcons = {
 };
 
 const container = document.getElementById("players-container");
+
 players.forEach(player => {
     const row = document.createElement("div");
     row.className = "player-row";
     if(player.position === 1) row.classList.add("top-1");
     else if(player.position === 2) row.classList.add("top-2");
     else if(player.position === 3) row.classList.add("top-3");
-    else if(player.position >=4 && player.position <=5) row.classList.add("next-players");
+    else row.classList.add("next-players");
 
     const left = document.createElement("div");
     left.className = "player-info";
@@ -223,10 +221,7 @@ players.forEach(player => {
     for(const [mode, tier] of Object.entries(player.gamemodes)){
         const gm = document.createElement("div");
         gm.className = "gamemode-item";
-        gm.innerHTML = `
-            <img src="${gamemodeIcons[mode]}" alt="${mode}">
-            <span class="tier-badge">${tier}</span>
-        `;
+        gm.innerHTML = `<img src="${gamemodeIcons[mode]}" alt="${mode}"><span class="tier-badge">${tier}</span>`;
         right.appendChild(gm);
     }
 
@@ -234,11 +229,9 @@ players.forEach(player => {
     row.appendChild(right);
     container.appendChild(row);
 
-    // Click opens modal
     row.addEventListener("click", () => openModal(player));
 });
 
-// Modal functionality
 const modal = document.getElementById("modal");
 const backdrop = document.getElementById("modal-backdrop");
 const modalName = document.getElementById("modalName");
@@ -268,7 +261,6 @@ function closeModal(){
     backdrop.classList.remove("active");
 }
 
-// Search bar
 document.getElementById("searchInput").addEventListener("keypress", function(e){
     if(e.key === "Enter"){
         const name = e.target.value.trim();
