@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cracked Tiers 1.20</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.3/dist/tailwind.min.css" rel="stylesheet">
+<style>
+  body {
+    background: linear-gradient(to bottom, #0f172a, #1e293b);
+    font-family: 'Arial', sans-serif;
+  }
+  .player-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: rgba(15,23,42,0.6);
+    padding: 4px 8px;
+    border-radius: 10px;
+    transition: transform 0.2s;
+  }
+  .player-row:hover {
+    transform: scale(1.02);
+  }
+  .player-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 200px;
+  }
+  .gamemodes {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+  }
+  .gamemode-item {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+  }
+  .tier-badge {
+    background: #1e293b;
+    color: #f8fafc;
+    padding: 1px 4px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    min-width: 40px;
+    text-align: center;
+    font-weight: 600;
+  }
+  img.skin {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2px solid #6366f1;
+  }
+  img.gamemode-icon {
+    width: 24px;
+    height: 24px;
+  }
+</style>
+</head>
+<body class="p-4 min-h-screen">
+<h1 class="text-3xl font-bold text-center text-white mb-6">Cracked Tiers 1.20</h1>
+
+<div id="players-container" class="space-y-2 max-w-6xl mx-auto">
+  <!-- Player row -->
+</div>
+
+<script>
+const players = [
+  {
+    position: 1,
+    name: "brainless100",
+    region: "AS",
+    gamemodes: { Axe:"HT2", Nethpot:"HT4", Mace:"HT3 Strong", Tank:"-", UHC:"-" }
+  }
+];
+
+const gamemodeIcons = {
+  Axe: "https://i.ibb.co/0j5tjC7/axe.png",
+  Nethpot: "https://i.ibb.co/VmqN3Xv/nethpot.png",
+  Mace: "https://i.ibb.co/qWNXYF5/mace.png",      // Example mace icon
+  Tank: "https://i.ibb.co/4Yb2x4b/tank.png",      // Example tank icon
+  UHC: "https://i.ibb.co/KbYvLwT/uhc.png"
+};
+
+const container = document.getElementById("players-container");
+
+players.forEach(player => {
+  const row = document.createElement("div");
+  row.className = "player-row";
+
+  const left = document.createElement("div");
+  left.className = "player-info";
+  left.innerHTML = `
+    <div class="font-bold text-yellow-400 text-base">${player.position}.</div>
+    <img src="https://mc-heads.net/avatar/${player.name}/32" alt="${player.name}" class="skin">
+    <div>
+      <div class="text-white font-semibold text-sm">${player.name}</div>
+      <div class="text-slate-300 text-xs">${player.region}</div>
+    </div>
+  `;
+
+  const right = document.createElement("div");
+  right.className = "gamemodes";
+  for(const [mode, tier] of Object.entries(player.gamemodes)){
+    const gm = document.createElement("div");
+    gm.className = "gamemode-item";
+    gm.innerHTML = `
+      <img src="${gamemodeIcons[mode]}" alt="${mode}" class="gamemode-icon">
+      <span class="tier-badge">${tier}</span>
+    `;
+    right.appendChild(gm);
+  }
+
+  row.appendChild(left);
+  row.appendChild(right);
+  container.appendChild(row);
+});
+</script>
+</body>
+</html>
