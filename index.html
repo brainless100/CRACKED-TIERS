@@ -81,7 +81,8 @@ body {
 <div id="modal-backdrop"></div>
 <div id="modal">
     <span class="close-btn" onclick="closeModal()">×</span>
-    <img src="" alt="Skin" class="modal-skin" id="modalSkin" onerror="this.onerror=null;this.src='https://mc-heads.net/avatar/Steve/128';">
+    <img src="" alt="Skin" class="modal-skin" id="modalSkin" 
+         onerror="this.onerror=null;this.src='https://mc-heads.net/avatar/Steve/128';">
     <h2 id="modalName"></h2>
     <div class="region" id="modalRegion"></div>
     <div class="overall" id="modalOverall"></div>
@@ -89,18 +90,11 @@ body {
 </div>
 
 <script>
-// Players Data - 10 Players
+// Players Data
 const players = [
     { position: 1, name: "brainless100", region: "AS", overall: 405, gamemodes: { Axe: "HT2", Nethpot: "HT4", Mace: "HT3 Strong", Tank: "-", UHC: "-", Crystal: "-" } },
     { position: 2, name: "Notch", region: "AS", overall: 320, gamemodes: { Axe: "LT3", Nethpot: "HT3", Mace: "-", Tank: "-", UHC: "LT3", Crystal: "-" } },
-    { position: 3, name: "Player3", region: "EU", overall: 280, gamemodes: { Axe: "-", Nethpot: "-", Mace: "-", Tank: "-", UHC: "-", Crystal: "-" } },
-    { position: 4, name: "Player4", region: "NA", overall: 260, gamemodes: { Axe: "-", Nethpot: "-", Mace: "-", Tank: "-", UHC: "-", Crystal: "-" } },
-    { position: 5, name: "Player5", region: "EU", overall: 240, gamemodes: { Axe: "-", Nethpot: "-", Mace: "-", Tank: "-", UHC: "-", Crystal: "-" } },
-    { position: 6, name: "Player6", region: "AS", overall: 220, gamemodes: { Axe: "-", Nethpot: "-", Mace: "-", Tank: "-", UHC: "-", Crystal: "-" } },
-    { position: 7, name: "Player7", region: "NA", overall: 200, gamemodes: { Axe: "-", Nethpot: "-", Mace: "-", Tank: "-", UHC: "-", Crystal: "-" } },
-    { position: 8, name: "Player8", region: "EU", overall: 180, gamemodes: { Axe: "-", Nethpot: "-", Mace: "-", Tank: "-", UHC: "-", Crystal: "-" } },
-    { position: 9, name: "Player9", region: "AS", overall: 160, gamemodes: { Axe: "-", Nethpot: "-", Mace: "-", Tank: "-", UHC: "-", Crystal: "-" } },
-    { position: 10, name: "Player10", region: "NA", overall: 140, gamemodes: { Axe: "-", Nethpot: "-", Mace: "-", Tank: "-", UHC: "-", Crystal: "-" } }
+    { position: 3, name: "Player3", region: "EU", overall: 280, gamemodes: { Axe: "-", Nethpot: "-", Mace: "-", Tank: "-", UHC: "-", Crystal: "-" } }
 ];
 
 const gamemodeIcons = {
