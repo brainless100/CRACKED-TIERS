@@ -16,9 +16,7 @@ html, body {
 ::-webkit-scrollbar {
     width: 12px;
 }
-::-webkit-scrollbar-track {
-    background: #1e293b; border-radius: 10px;
-}
+::-webkit-scrollbar-track { background: #1e293b; border-radius: 10px; }
 ::-webkit-scrollbar-thumb {
     background: linear-gradient(180deg, #00ffff, #3b82f6);
     border-radius: 10px; border: 3px solid #1e293b;
@@ -31,16 +29,11 @@ body { padding-top: 120px; }
 
 .header {
     position: fixed; top:0; left:0; width:100%;
-    padding:10px 20px;
-    display:flex; justify-content:space-between; align-items:center;
-    background-color: rgba(15,23,42,0.95);
-    z-index:1000;
+    padding:10px 20px; display:flex; justify-content:space-between; align-items:center;
+    background-color: rgba(15,23,42,0.95); z-index:1000;
     box-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
-.logo {
-    font-size: 1.8rem; font-weight:bold; color:#facc15;
-    text-shadow: 2px 2px 6px rgba(0,0,0,0.5);
-}
+.logo { font-size: 1.8rem; font-weight:bold; color:#facc15; text-shadow: 2px 2px 6px rgba(0,0,0,0.5); }
 .search-input {
     padding:6px 12px; border-radius:10px; border:none; outline:none;
     font-size:1rem; box-shadow:0 4px 12px rgba(0,0,0,0.3);
@@ -54,18 +47,15 @@ body { padding-top: 120px; }
     gap: 12px; padding: 8px 0; z-index:999; flex-wrap:wrap;
 }
 .filter-item {
-    padding:6px 12px; border-radius:10px;
-    background-color:#1e293b; color:#facc15; font-weight:bold;
-    cursor:pointer; display:flex; align-items:center; gap:6px;
-    transition: transform 0.2s, background 0.3s;
+    padding:6px 12px; border-radius:10px; background-color:#1e293b;
+    color:#facc15; font-weight:bold; cursor:pointer; display:flex;
+    align-items:center; gap:6px; transition: transform 0.2s, background 0.3s;
 }
 .filter-item img { width:20px; height:20px; object-fit:contain; }
 .filter-item:hover { transform: scale(1.05); background-color:#3b82f6; }
 .filter-count { background:#f87171; border-radius:50%; padding:2px 6px; font-size:0.75rem; color:#fff; }
 
-#players-container {
-    max-width: 6xl; margin:0 auto; display:flex; flex-direction:column; gap:12px;
-}
+#players-container { max-width: 6xl; margin:0 auto; display:flex; flex-direction:column; gap:12px; }
 .player-row {
     display:flex; justify-content:space-between; align-items:center;
     background-color: rgba(15,23,42,0.75); padding:10px 14px; border-radius:12px;
@@ -75,12 +65,10 @@ body { padding-top: 120px; }
     transform: scale(1.02); box-shadow: 0 0 20px rgba(99,102,241,0.3);
 }
 .player-info { display:flex; align-items:center; gap:10px; min-width:220px; }
-.player-info img.skin {
-    width:64px; height:64px; border-radius:50%; border:2px solid #6366f1;
-}
+.player-info img.skin { width:64px; height:64px; border-radius:50%; border:2px solid #6366f1; }
 .player-name { display:flex; flex-direction:column; }
 .player-name .name { font-weight:bold; font-size:1rem; color:#facc15; }
-.player-name .overall { font-size:0.9rem; color:#fff; margin-top:2px; }
+.player-name .overall { font-size:0.85rem; color:#fff; margin-top:2px; }
 .player-name .rank { font-size:0.8rem; color:#22c55e; font-weight:bold; }
 .player-name .region { font-size:0.8rem; color:#f87171; font-weight:bold; margin-left:5px; }
 
@@ -113,11 +101,11 @@ body { padding-top: 120px; }
 #modal .region { font-size:0.9rem; color:#f87171; margin-bottom:10px; }
 #modal .overall {
     background:#1e293b; padding:6px 10px; border-radius:8px; font-weight:bold;
-    margin-bottom:12px; display:flex; align-items:center; gap:6px; font-size:1.2rem;
+    margin-bottom:12px; display:flex; align-items:center; gap:6px; font-size:1rem; /* reduced from 1.2rem */
 }
 #modal .close-btn { position:absolute; top:8px; right:10px; cursor:pointer; font-weight:bold; font-size:1.2rem; }
 #modal .modal-skin { width:80px; height:80px; border-radius:50%; border:3px solid gold; margin-bottom:8px; }
-#modal .modal-overall-icon { width:28px; height:28px; }
+#modal .modal-overall-icon { width:24px; height:24px; } /* smaller icon */
 </style>
 </head>
 <body>
@@ -146,21 +134,13 @@ body { padding-top: 120px; }
 </div>
 
 <script>
-// Players Data
 const players = [
     { position: 1, name: "brainless100", region: "AS", overall: 405, gamemodes: { Axe: "HT2", Nethpot: "HT4", Mace: "HT3 Strong", Tank: "-", UHC: "-", Crystal: "-" } },
     { position: 2, name: "GummyBearTheGOAT", region: "AS", overall: 320, gamemodes: { Axe: "LT3", Nethpot: "HT3", Mace: "-", Tank: "-", UHC: "LT3", Crystal: "-" } },
     { position: 3, name: "Player3", region: "EU", overall: 280, gamemodes: { Axe: "-", Nethpot: "-", Mace: "-", Tank: "-", UHC: "-", Crystal: "-" } },
-    { position: 4, name: "Player4", region: "AS", overall: 200, gamemodes: { Axe: "-", Nethpot: "-", Mace: "-", Tank: "-", UHC: "-", Crystal: "-" } },
-    { position: 5, name: "Player5", region: "NA", overall: 150, gamemodes: { Axe: "-", Nethpot: "-", Mace: "-", Tank: "-", UHC: "-", Crystal: "-" } },
-    { position: 6, name: "Player6", region: "EU", overall: 180, gamemodes: { Axe: "-", Nethpot: "-", Mace: "-", Tank: "-", UHC: "LT1", Crystal: "-" } },
-    { position: 7, name: "Player7", region: "NA", overall: 220, gamemodes: { Axe: "HT1", Nethpot: "-", Mace: "-", Tank: "-", UHC: "-", Crystal: "-" } },
-    { position: 8, name: "Player8", region: "AS", overall: 190, gamemodes: { Axe: "-", Nethpot: "HT2", Mace: "-", Tank: "-", UHC: "-", Crystal: "-" } },
-    { position: 9, name: "Player9", region: "EU", overall: 210, gamemodes: { Axe: "-", Nethpot: "-", Mace: "-", Tank: "LT1", UHC: "-", Crystal: "-" } },
-    { position: 10, name: "Player10", region: "NA", overall: 170, gamemodes: { Axe: "-", Nethpot: "-", Mace: "-", Tank: "-", UHC: "-", Crystal: "HT1" } }
+    { position: 4, name: "Player4", region: "AS", overall: 200, gamemodes: { Axe: "-", Nethpot: "-", Mace: "-", Tank: "-", UHC: "-", Crystal: "-" } }
 ];
 
-// Gamemode Icons + Overall Icon
 const gamemodeIcons = {
     Overall: "https://i.imgur.com/hRhMCTg.png",
     Axe: "icon/axe.png",
@@ -171,16 +151,13 @@ const gamemodeIcons = {
     Crystal: "icon/crystal.png"
 };
 
-// Render Leaderboard
 function renderLeaderboard(data) {
     const container = document.getElementById("players-container");
     container.innerHTML = "";
-
     data.forEach(player => {
         const row = document.createElement("div");
-        row.className = "player-row " +
-            (player.position === 1 ? "top-1" : player.position === 2 ? "top-2" : player.position === 3 ? "top-3" : "next-players");
-
+        row.className = "player-row " + 
+            (player.position===1?"top-1":player.position===2?"top-2":player.position===3?"top-3":"next-players");
         row.innerHTML = `
             <div class="player-info">
                 <img src="https://crafatar.com/avatars/${player.name}?size=64&overlay" class="skin" />
@@ -198,71 +175,58 @@ function renderLeaderboard(data) {
                     </div>`).join("")}
             </div>
         `;
-        row.addEventListener("click", () => openModal(player));
+        row.addEventListener("click", ()=>openModal(player));
         container.appendChild(row);
     });
 }
 
-// Render Filters with icons
 function renderFilters() {
     const filterBar = document.getElementById("filterBar");
     filterBar.innerHTML = "";
-
-    const gamemodes = Object.keys(gamemodeIcons);
-    gamemodes.forEach(gm => {
-        const count = gm === "Overall" ? players.length :
-            players.filter(p => p.gamemodes[gm] && p.gamemodes[gm] !== "-").length;
+    Object.keys(gamemodeIcons).forEach(gm => {
+        const count = gm==="Overall"?players.length:players.filter(p=>p.gamemodes[gm] && p.gamemodes[gm]!=="-").length;
         const div = document.createElement("div");
-        div.className = "filter-item";
-        div.innerHTML = `<img src="${gamemodeIcons[gm]}" alt="${gm}"><span>${gm}</span><span class="filter-count">${count}</span>`;
-        div.addEventListener("click", () => {
-            const filtered = gm === "Overall" ? players :
-                players.filter(p => p.gamemodes[gm] && p.gamemodes[gm] !== "-");
+        div.className="filter-item";
+        div.innerHTML=`<img src="${gamemodeIcons[gm]}" alt="${gm}"><span>${gm}</span><span class="filter-count">${count}</span>`;
+        div.addEventListener("click", ()=> {
+            const filtered = gm==="Overall"?players:players.filter(p=>p.gamemodes[gm] && p.gamemodes[gm]!=="-");
             renderLeaderboard(filtered);
         });
         filterBar.appendChild(div);
     });
-
-    const resetBtn = document.createElement("div");
-    resetBtn.className = "filter-item";
-    resetBtn.innerHTML = `<span>Reset</span>`;
-    resetBtn.addEventListener("click", () => renderLeaderboard(players));
+    const resetBtn=document.createElement("div");
+    resetBtn.className="filter-item"; resetBtn.innerHTML=`<span>Reset</span>`;
+    resetBtn.addEventListener("click", ()=>renderLeaderboard(players));
     filterBar.appendChild(resetBtn);
 }
 
-// Modal
 function openModal(player) {
-    document.getElementById("modalSkin").src = `https://crafatar.com/avatars/${player.name}?size=80&overlay`;
-    document.getElementById("modalName").innerText = player.name;
-    document.getElementById("modalRegion").innerText = `Region: ${player.region}`;
-    document.getElementById("modalOverallPoints").innerText = player.overall;
-
+    document.getElementById("modalSkin").src=`https://crafatar.com/avatars/${player.name}?size=80&overlay`;
+    document.getElementById("modalName").innerText=player.name;
+    document.getElementById("modalRegion").innerText=`Region: ${player.region}`;
+    document.getElementById("modalOverallPoints").innerText=player.overall;
     document.getElementById("modalGamemodes").innerHTML = Object.entries(player.gamemodes)
-        .filter(([gm]) => gm !== "Overall")
-        .map(([gm, tier]) => `
+        .filter(([gm])=>gm!=="Overall")
+        .map(([gm,tier])=>`
             <div class="gamemode-item">
                 <img src="${gamemodeIcons[gm]}" alt="${gm}">
                 <div class="tier-badge">${tier}</div>
             </div>
         `).join("");
-
     document.getElementById("modal-backdrop").classList.add("active");
     document.getElementById("modal").classList.add("active");
 }
+
 function closeModal() {
     document.getElementById("modal-backdrop").classList.remove("active");
     document.getElementById("modal").classList.remove("active");
 }
 document.getElementById("modal-backdrop").addEventListener("click", closeModal);
-
-// Search
-document.getElementById("searchInput").addEventListener("input", e => {
-    const value = e.target.value.toLowerCase();
-    const filtered = players.filter(p => p.name.toLowerCase().includes(value));
-    renderLeaderboard(filtered);
+document.getElementById("searchInput").addEventListener("input", e=>{
+    const value=e.target.value.toLowerCase();
+    renderLeaderboard(players.filter(p=>p.name.toLowerCase().includes(value)));
 });
 
-// Init
 renderLeaderboard(players);
 renderFilters();
 </script>
