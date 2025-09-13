@@ -6,9 +6,6 @@
 <title>Cracked Tiers 1.20</title>
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.3/dist/tailwind.min.css" rel="stylesheet">
 <style>
-/* -----------------------------
-   Base + Scrollbar Customization
------------------------------ */
 html, body {
     margin: 0;
     padding: 0;
@@ -17,8 +14,6 @@ html, body {
     overflow-x: hidden;
     overflow-y: auto;
 }
-
-/* Chrome, Edge, Safari */
 ::-webkit-scrollbar {
     width: 12px;
 }
@@ -34,21 +29,13 @@ html, body {
 ::-webkit-scrollbar-thumb:hover {
     background: linear-gradient(180deg, #22ddff, #60a5fa);
 }
-
-/* Firefox */
 * {
     scrollbar-width: thin;
     scrollbar-color: #00ffff #1e293b;
 }
-
-/* -----------------------------
-   Header + Filter + Body
------------------------------ */
 body {
     padding-top: 120px;
 }
-
-/* Header */
 .header {
     position: fixed;
     top: 0;
@@ -78,8 +65,6 @@ body {
     background-color: #1e293b;
     color: #fff;
 }
-
-/* Filter Bar */
 .filter-bar {
     position: fixed;
     top: 60px;
@@ -108,8 +93,6 @@ body {
 }
 .filter-item:hover { transform: scale(1.05); background-color: #3b82f6; }
 .filter-count { background: #f87171; border-radius: 50%; padding: 2px 6px; font-size: 0.75rem; color: #fff; }
-
-/* Players Container */
 #players-container {
     max-width: 6xl;
     margin: 0 auto;
@@ -117,8 +100,6 @@ body {
     flex-direction: column;
     gap: 12px;
 }
-
-/* Player Row */
 .player-row {
     display: flex;
     justify-content: space-between;
@@ -174,8 +155,6 @@ body {
     font-weight: bold;
     margin-left: 5px;
 }
-
-/* Gamemodes */
 .gamemodes {
     display: flex;
     flex-wrap: wrap;
@@ -203,15 +182,11 @@ body {
     font-weight: 600;
     width: 100%;
 }
-
-/* Glow top */
 @keyframes proGlow {0% {box-shadow:0 0 8px rgba(255,255,255,0.2);}50% {box-shadow:0 0 16px rgba(255,255,255,0.5);}100% {box-shadow:0 0 8px rgba(255,255,255,0.2);}}
 .top-1 { border: 3px solid gold; animation: proGlow 1.5s infinite; }
 .top-2 { border:3px solid silver; animation: proGlow 1.5s infinite; }
 .top-3 { border:3px solid #cd7f32; animation: proGlow 1.5s infinite; }
 .next-players { border:2px solid grey; background: rgba(128,128,128,0.1); }
-
-/* Modal */
 #modal-backdrop {
     position: fixed;
     top:0; left:0;
@@ -248,7 +223,6 @@ body {
 </head>
 <body>
 
-<!-- Header -->
 <div class="header">
     <div class="logo">Cracked Tiers</div>
     <div class="search-container">
@@ -256,13 +230,9 @@ body {
     </div>
 </div>
 
-<!-- Filter Bar -->
 <div class="filter-bar" id="filterBar"></div>
-
-<!-- Players Container -->
 <div id="players-container" class="max-w-6xl mx-auto space-y-3 mt-5"></div>
 
-<!-- Modal -->
 <div id="modal-backdrop"></div>
 <div id="modal">
     <span class="close-btn" onclick="closeModal()">×</span>
@@ -274,9 +244,7 @@ body {
 </div>
 
 <script>
-// ----------------------------
 // Players Data
-// ----------------------------
 const players = [
     { position: 1, name: "brainless100", region: "AS", overall: 405, gamemodes: { Axe: "HT2", Nethpot: "HT4", Mace: "HT3 Strong", Tank: "-", UHC: "-", Crystal: "-" } },
     { position: 2, name: "GummyBearTheGOAT", region: "AS", overall: 320, gamemodes: { Axe: "LT3", Nethpot: "HT3", Mace: "-", Tank: "-", UHC: "LT3", Crystal: "-" } },
@@ -290,9 +258,10 @@ const players = [
     { position: 10, name: "Player10", region: "NA", overall: 170, gamemodes: { Axe: "-", Nethpot: "-", Mace: "-", Tank: "-", UHC: "-", Crystal: "HT1" } }
 ];
 
-// ----------------------------
+// Add Overall to gamemodes for filtering
+players.forEach(p => p.gamemodes.Overall = "Overall");
+
 // Gamemode Icons
-// ----------------------------
 const gamemodeIcons = {
     Overall: "https://cdn-icons-png.flaticon.com/128/25/25231.png",
     Axe: "icon/axe.png",
@@ -303,9 +272,7 @@ const gamemodeIcons = {
     Crystal: "icon/crystal.png"
 };
 
-// ----------------------------
 // Render Leaderboard
-// ----------------------------
 function renderLeaderboard(data) {
     const container = document.getElementById("players-container");
     container.innerHTML = "";
@@ -332,15 +299,12 @@ function renderLeaderboard(data) {
                     </div>`).join("")}
             </div>
         `;
-
         row.addEventListener("click", () => openModal(player));
         container.appendChild(row);
     });
 }
 
-// ----------------------------
 // Filters
-// ----------------------------
 function renderFilters() {
     const filterBar = document.getElementById("filterBar");
     filterBar.innerHTML = "";
@@ -366,9 +330,7 @@ function renderFilters() {
     filterBar.appendChild(resetBtn);
 }
 
-// ----------------------------
 // Modal
-// ----------------------------
 function openModal(player) {
     document.getElementById("modalSkin").src = `https://mineskin.eu/avatar/${player.name}/80.png?overlay`;
     document.getElementById("modalName").innerText = player.name;
@@ -390,18 +352,14 @@ function closeModal() {
 }
 document.getElementById("modal-backdrop").addEventListener("click", closeModal);
 
-// ----------------------------
 // Search
-// ----------------------------
 document.getElementById("searchInput").addEventListener("input", e => {
     const value = e.target.value.toLowerCase();
     const filtered = players.filter(p => p.name.toLowerCase().includes(value));
     renderLeaderboard(filtered);
 });
 
-// ----------------------------
 // Init
-// ----------------------------
 renderLeaderboard(players);
 renderFilters();
 </script>
