@@ -6,49 +6,219 @@
 <title>Cracked Tiers 1.20</title>
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.3/dist/tailwind.min.css" rel="stylesheet">
 <style>
-html, body {margin: 0; padding: 0; background-color: #0f172a; font-family: 'Arial', sans-serif; overflow-x: hidden; overflow-y: auto;}
-::-webkit-scrollbar {width: 12px;}
-::-webkit-scrollbar-track {background: #1e293b; border-radius: 10px;}
-::-webkit-scrollbar-thumb {background: linear-gradient(180deg, #00ffff, #3b82f6); border-radius: 10px; border: 3px solid #1e293b;}
-::-webkit-scrollbar-thumb:hover {background: linear-gradient(180deg, #22ddff, #60a5fa);}
-* {scrollbar-width: thin; scrollbar-color: #00ffff #1e293b;}
-body {padding-top: 120px;}
-.header {position: fixed; top: 0; left: 0; width: 100%; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; background-color: rgba(15,23,42,0.95); z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.3);}
-.logo {font-size: 1.8rem; font-weight: bold; color: #facc15; text-shadow: 2px 2px 6px rgba(0,0,0,0.5);}
-.search-input {padding: 6px 12px; border-radius: 10px; border: none; outline: none; font-size: 1rem; box-shadow: 0 4px 12px rgba(0,0,0,0.3); background-color: #1e293b; color: #fff;}
-.filter-bar {position: fixed; top: 60px; left: 0; width: 100%; background-color: rgba(15,23,42,0.95); display: flex; justify-content: center; align-items: center; gap: 12px; padding: 8px 0; z-index: 999; flex-wrap: wrap;}
-.filter-item {padding: 6px 12px; border-radius: 10px; background-color: #1e293b; color: #facc15; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: transform 0.2s, background 0.3s;}
-.filter-item:hover {transform: scale(1.05); background-color: #3b82f6;}
-.filter-count {background: #f87171; border-radius: 50%; padding: 2px 6px; font-size: 0.75rem; color: #fff;}
-#players-container {max-width: 6xl; margin: 0 auto; display: flex; flex-direction: column; gap: 12px;}
-.player-row {display: flex; justify-content: space-between; align-items: center; background-color: rgba(15,23,42,0.75); padding: 10px 14px; border-radius: 12px; transition: transform 0.2s, box-shadow 0.4s; cursor: pointer;}
-.player-row.highlight {box-shadow: 0 0 15px #facc15; transform: scale(1.02);}
-.player-row:hover {transform: scale(1.02); box-shadow: 0 0 20px rgba(99,102,241,0.3);}
-.player-info {display: flex; align-items: center; gap: 10px; min-width: 220px;}
-.player-info img.skin {width: 64px; height: 64px; border-radius: 50%; border: 2px solid #6366f1;}
-.player-name {display: flex; flex-direction: column;}
-.player-name .name {font-weight: bold; font-size: 1rem; color: #facc15;}
-.player-name .overall {font-size: 0.9rem; color: #fff; margin-top: 2px;}
-.player-name .rank {font-size: 0.8rem; color: #22c55e; font-weight: bold;}
-.player-name .region {font-size: 0.8rem; color: #f87171; font-weight: bold; margin-left: 5px;}
-.gamemodes {display: flex; flex-wrap: wrap; gap: 12px;}
-.gamemode-item {display: flex; flex-direction: column; align-items: center; min-width: 60px;}
-.gamemode-item img {width: 48px; height: 48px; margin-bottom: 2px; object-fit: contain;}
-.tier-badge {background-color: #1e293b; color: #f8fafc; padding: 2px 6px; border-radius: 6px; font-size: 0.75rem; text-align: center; font-weight: 600; width: 100%;}
-@keyframes proGlow {0% {box-shadow:0 0 8px rgba(255,255,255,0.2);}50% {box-shadow:0 0 16px rgba(255,255,255,0.5);}100% {box-shadow:0 0 8px rgba(255,255,255,0.2);}}
-.top-1 {border: 3px solid gold; animation: proGlow 1.5s infinite;}
-.top-2 {border:3px solid silver; animation: proGlow 1.5s infinite;}
-.top-3 {border:3px solid #cd7f32; animation: proGlow 1.5s infinite;}
-.next-players {border:2px solid grey; background: rgba(128,128,128,0.1);}
-#modal-backdrop {position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(6px); opacity:0; pointer-events:none; transition: opacity 0.3s ease; z-index:900;}
-#modal-backdrop.active {opacity:1; pointer-events:all;}
-#modal {position: fixed; top:50%; left:50%; transform: translate(-50%,-50%) scale(0); background-color: #1e293b; padding: 20px; border-radius: 12px; z-index:1000; width: 320px; color: #fff; transition: transform 0.3s ease; box-shadow: 0 0 25px rgba(0,0,0,0.7);}
-#modal.active {transform: translate(-50%,-50%) scale(1);}
-#modal h2 {font-size:1.4rem; font-weight:bold; margin-bottom:6px;}
-#modal .region {font-size:0.9rem; color:#f87171; margin-bottom:10px;}
-#modal .overall {background:#6366f1; padding:4px 8px; border-radius:6px; font-weight:bold; margin-bottom:12px; display:inline-block;}
-#modal .close-btn {position:absolute; top:8px; right:10px; cursor:pointer; font-weight:bold; font-size:1.2rem;}
-#modal .modal-skin {width:80px; height:80px; border-radius:50%; border:3px solid gold; margin-bottom:8px;}
+html, body {
+    margin: 0;
+    padding: 0;
+    background-color: #0f172a;
+    font-family: 'Arial', sans-serif;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+::-webkit-scrollbar {
+    width: 12px;
+}
+::-webkit-scrollbar-track {
+    background: #1e293b;
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #00ffff, #3b82f6);
+    border-radius: 10px;
+    border: 3px solid #1e293b;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #22ddff, #60a5fa);
+}
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #00ffff #1e293b;
+}
+body {
+    padding-top: 120px;
+}
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgba(15,23,42,0.95);
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+.logo {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #facc15;
+    text-shadow: 2px 2px 6px rgba(0,0,0,0.5);
+}
+.search-input {
+    padding: 6px 12px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    background-color: #1e293b;
+    color: #fff;
+}
+.filter-bar {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    background-color: rgba(15,23,42,0.95);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0;
+    z-index: 999;
+    flex-wrap: wrap;
+}
+.filter-item {
+    padding: 6px 12px;
+    border-radius: 10px;
+    background-color: #1e293b;
+    color: #facc15;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: transform 0.2s, background 0.3s;
+}
+.filter-item:hover { transform: scale(1.05); background-color: #3b82f6; }
+.filter-count { background: #f87171; border-radius: 50%; padding: 2px 6px; font-size: 0.75rem; color: #fff; }
+#players-container {
+    max-width: 6xl;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.player-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgba(15,23,42,0.75);
+    padding: 10px 14px;
+    border-radius: 12px;
+    transition: transform 0.2s, box-shadow 0.4s;
+    cursor: pointer;
+}
+.player-row.highlight {
+    box-shadow: 0 0 15px #facc15;
+    transform: scale(1.02);
+}
+.player-row:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 20px rgba(99,102,241,0.3);
+}
+.player-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 220px;
+}
+.player-info img.skin {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    border: 2px solid #6366f1;
+}
+.player-name {
+    display: flex;
+    flex-direction: column;
+}
+.player-name .name {
+    font-weight: bold;
+    font-size: 1rem;
+    color: #facc15;
+}
+.player-name .overall {
+    font-size: 0.9rem;
+    color: #fff;
+    margin-top: 2px;
+}
+.player-name .rank {
+    font-size: 0.8rem;
+    color: #22c55e;
+    font-weight: bold;
+}
+.player-name .region {
+    font-size: 0.8rem;
+    color: #f87171;
+    font-weight: bold;
+    margin-left: 5px;
+}
+.gamemodes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.gamemode-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 60px;
+}
+.gamemode-item img {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 2px;
+    object-fit: contain;
+}
+.tier-badge {
+    background-color: #1e293b;
+    color: #f8fafc;
+    padding: 2px 6px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    text-align: center;
+    font-weight: 600;
+    width: 100%;
+}
+@keyframes proGlow {0% {box-shadow:0 0 8px rgba(255,255,255,0.2);}50% {box-shadow:0 0 16px rgba(255,255,255,0.5);}100% {box-shadow:0 0 8px rgba(255,255,255,0.2);} }
+.top-1 { border: 3px solid gold; animation: proGlow 1.5s infinite; }
+.top-2 { border:3px solid silver; animation: proGlow 1.5s infinite; }
+.top-3 { border:3px solid #cd7f32; animation: proGlow 1.5s infinite; }
+.next-players { border:2px solid grey; background: rgba(128,128,128,0.1); }
+#modal-backdrop {
+    position: fixed;
+    top:0; left:0;
+    width:100%; height:100%;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(6px);
+    opacity:0;
+    pointer-events:none;
+    transition: opacity 0.3s ease;
+    z-index:900;
+}
+#modal-backdrop.active { opacity:1; pointer-events:all; }
+#modal {
+    position: fixed;
+    top:50%;
+    left:50%;
+    transform: translate(-50%,-50%) scale(0);
+    background-color: #1e293b;
+    padding: 20px;
+    border-radius: 12px;
+    z-index:1000;
+    width: 320px;
+    color: #fff;
+    transition: transform 0.3s ease;
+    box-shadow: 0 0 25px rgba(0,0,0,0.7);
+}
+#modal.active { transform: translate(-50%,-50%) scale(1); }
+#modal h2 { font-size:1.4rem; font-weight:bold; margin-bottom:6px; }
+#modal .region { font-size:0.9rem; color:#f87171; margin-bottom:10px; }
+#modal .overall { background:#6366f1; padding:4px 8px; border-radius:6px; font-weight:bold; margin-bottom:12px; display:inline-block; }
+#modal .close-btn { position:absolute; top:8px; right:10px; cursor:pointer; font-weight:bold; font-size:1.2rem; }
+#modal .modal-skin { width:80px; height:80px; border-radius:50%; border:3px solid gold; margin-bottom:8px; }
 </style>
 </head>
 <body>
@@ -88,12 +258,12 @@ const players = [
     { position: 10, name: "Player10", region: "NA", overall: 170, gamemodes: { Axe: "-", Nethpot: "-", Mace: "-", Tank: "-", UHC: "-", Crystal: "HT1" } }
 ];
 
-// Add Overall to gamemodes
+// Add Overall to gamemodes for filtering
 players.forEach(p => p.gamemodes.Overall = "Overall");
 
-// Gamemode Icons (Custom Imgur image for Overall)
+// Gamemode Icons
 const gamemodeIcons = {
-    Overall: "https://i.imgur.com/DroL5nJ.png",  // Imgur image
+    Overall: "https://i.imgur.com/hRhMCTg.png",  // New Imgur icon
     Axe: "icon/axe.png",
     Nethpot: "icon/nethpot.png",
     Mace: "icon/mace.png",
@@ -102,13 +272,16 @@ const gamemodeIcons = {
     Crystal: "icon/crystal.png"
 };
 
-// Render leaderboard
+// Render Leaderboard
 function renderLeaderboard(data) {
     const container = document.getElementById("players-container");
     container.innerHTML = "";
+
     data.forEach(player => {
         const row = document.createElement("div");
-        row.className = "player-row " + (player.position === 1 ? "top-1" : player.position === 2 ? "top-2" : player.position === 3 ? "top-3" : "next-players");
+        row.className = "player-row " +
+            (player.position === 1 ? "top-1" : player.position === 2 ? "top-2" : player.position === 3 ? "top-3" : "next-players");
+
         row.innerHTML = `
             <div class="player-info">
                 <img src="https://mineskin.eu/avatar/${player.name}/64.png?overlay" class="skin" />
@@ -131,19 +304,25 @@ function renderLeaderboard(data) {
     });
 }
 
-// Render filters
+// Filters
 function renderFilters() {
     const filterBar = document.getElementById("filterBar");
     filterBar.innerHTML = "";
+
     const gamemodes = Object.keys(gamemodeIcons);
+
     gamemodes.forEach(gm => {
         const count = players.filter(p => p.gamemodes[gm] && p.gamemodes[gm] !== "-").length;
         const div = document.createElement("div");
         div.className = "filter-item";
         div.innerHTML = `<span>${gm}</span><span class="filter-count">${count}</span>`;
-        div.addEventListener("click", () => renderLeaderboard(players.filter(p => p.gamemodes[gm] && p.gamemodes[gm] !== "-")));
+        div.addEventListener("click", () => {
+            const filtered = players.filter(p => p.gamemodes[gm] && p.gamemodes[gm] !== "-");
+            renderLeaderboard(filtered);
+        });
         filterBar.appendChild(div);
     });
+
     const resetBtn = document.createElement("div");
     resetBtn.className = "filter-item";
     resetBtn.innerHTML = `<span>Reset</span>`;
@@ -151,7 +330,7 @@ function renderFilters() {
     filterBar.appendChild(resetBtn);
 }
 
-// Modal functions
+// Modal
 function openModal(player) {
     document.getElementById("modalSkin").src = `https://mineskin.eu/avatar/${player.name}/80.png?overlay`;
     document.getElementById("modalName").innerText = player.name;
@@ -161,17 +340,23 @@ function openModal(player) {
         <div class="gamemode-item">
             <img src="${gamemodeIcons[gm]}" alt="${gm}">
             <div class="tier-badge">${tier}</div>
-        </div>`).join("");
+        </div>
+    `).join("");
+
     document.getElementById("modal-backdrop").classList.add("active");
     document.getElementById("modal").classList.add("active");
 }
-function closeModal() { document.getElementById("modal-backdrop").classList.remove("active"); document.getElementById("modal").classList.remove("active"); }
+function closeModal() {
+    document.getElementById("modal-backdrop").classList.remove("active");
+    document.getElementById("modal").classList.remove("active");
+}
 document.getElementById("modal-backdrop").addEventListener("click", closeModal);
 
 // Search
 document.getElementById("searchInput").addEventListener("input", e => {
     const value = e.target.value.toLowerCase();
-    renderLeaderboard(players.filter(p => p.name.toLowerCase().includes(value)));
+    const filtered = players.filter(p => p.name.toLowerCase().includes(value));
+    renderLeaderboard(filtered);
 });
 
 // Init
