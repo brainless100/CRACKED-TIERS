@@ -15,29 +15,30 @@ html, body {
     background-color: #0f172a;
     font-family: 'Arial', sans-serif;
     overflow-x: hidden; /* horizontal scroll hatane ke liye */
+    overflow-y: auto; /* vertical scroll rahe */
 }
 
 /* Chrome, Edge, Safari */
 ::-webkit-scrollbar {
-    width: 10px;
+    width: 12px;
 }
 ::-webkit-scrollbar-track {
     background: #1e293b;
     border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb {
-    background: linear-gradient(180deg, #ff0040, #ff6600);
+    background: linear-gradient(180deg, #00ffff, #3b82f6);
     border-radius: 10px;
-    border: 2px solid #1e293b;
+    border: 3px solid #1e293b;
 }
 ::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(180deg, #ff3366, #ff9900);
+    background: linear-gradient(180deg, #22ddff, #60a5fa);
 }
 
 /* Firefox */
 * {
     scrollbar-width: thin;
-    scrollbar-color: #ff0040 #1e293b;
+    scrollbar-color: #00ffff #1e293b;
 }
 
 /* -----------------------------
@@ -274,16 +275,24 @@ body {
 
 <script>
 // ----------------------------
-// Players Data
+// Players Data (10 players)
 // ----------------------------
 const players = [
     { position: 1, name: "brainless100", region: "AS", overall: 405, gamemodes: { Axe: "HT2", Nethpot: "HT4", Mace: "HT3 Strong", Tank: "-", UHC: "-", Crystal: "-" } },
     { position: 2, name: "GummyBearTheGOAT", region: "AS", overall: 320, gamemodes: { Axe: "LT3", Nethpot: "HT3", Mace: "-", Tank: "-", UHC: "LT3", Crystal: "-" } },
     { position: 3, name: "Player3", region: "EU", overall: 280, gamemodes: { Axe: "-", Nethpot: "-", Mace: "-", Tank: "-", UHC: "-", Crystal: "-" } },
     { position: 4, name: "Player4", region: "AS", overall: 200, gamemodes: { Axe: "-", Nethpot: "-", Mace: "-", Tank: "-", UHC: "-", Crystal: "-" } },
-    { position: 5, name: "Player5", region: "NA", overall: 150, gamemodes: { Axe: "-", Nethpot: "-", Mace: "-", Tank: "-", UHC: "-", Crystal: "-" } }
+    { position: 5, name: "Player5", region: "NA", overall: 150, gamemodes: { Axe: "-", Nethpot: "-", Mace: "-", Tank: "-", UHC: "-", Crystal: "-" } },
+    { position: 6, name: "Player6", region: "EU", overall: 180, gamemodes: { Axe: "-", Nethpot: "-", Mace: "-", Tank: "-", UHC: "LT1", Crystal: "-" } },
+    { position: 7, name: "Player7", region: "NA", overall: 220, gamemodes: { Axe: "HT1", Nethpot: "-", Mace: "-", Tank: "-", UHC: "-", Crystal: "-" } },
+    { position: 8, name: "Player8", region: "AS", overall: 190, gamemodes: { Axe: "-", Nethpot: "HT2", Mace: "-", Tank: "-", UHC: "-", Crystal: "-" } },
+    { position: 9, name: "Player9", region: "EU", overall: 210, gamemodes: { Axe: "-", Nethpot: "-", Mace: "-", Tank: "LT1", UHC: "-", Crystal: "-" } },
+    { position: 10, name: "Player10", region: "NA", overall: 170, gamemodes: { Axe: "-", Nethpot: "-", Mace: "-", Tank: "-", UHC: "-", Crystal: "HT1" } }
 ];
 
+// ----------------------------
+// Gamemode Icons
+// ----------------------------
 const gamemodeIcons = {
     Overall: "https://cdn-icons-png.flaticon.com/128/25/25231.png",
     Axe: "icon/axe.png",
@@ -294,131 +303,107 @@ const gamemodeIcons = {
     Crystal: "icon/crystal.png"
 };
 
-const container = document.getElementById("players-container");
-const filterBar = document.getElementById("filterBar");
-const filters = ["Overall","Axe","Nethpot","Mace","Tank","UHC","Crystal"];
-
-// ----------------------------
-// Create Filter Buttons
-// ----------------------------
-filters.forEach(f => {
-    const btn = document.createElement("div");
-    btn.className = "filter-item";
-    btn.id = "filter-" + f;
-    let count = players.filter(p => f==="Overall" ? true : (p.gamemodes[f]!=="-")).length;
-    btn.innerHTML = `${f} <span class="filter-count">${count}</span>`;
-    btn.addEventListener("click", () => filterLeaderboard(f));
-    filterBar.appendChild(btn);
-});
-
 // ----------------------------
 // Render Leaderboard
 // ----------------------------
-function renderLeaderboard(selectedMode="Overall"){
+function renderLeaderboard(data) {
+    const container = document.getElementById("players-container");
     container.innerHTML = "";
-    let list = [...players];
-    if(selectedMode==="Overall"){
-        list.sort((a,b)=>b.overall - a.overall);
-    } else {
-        list.forEach(p => p.highlightMode = p.gamemodes[selectedMode]!=="-");
-    }
 
-    list.forEach((player,idx) => {
+    data.forEach(player => {
         const row = document.createElement("div");
-        row.className = "player-row";
-        if(idx===0) row.classList.add("top-1");
-        else if(idx===1) row.classList.add("top-2");
-        else if(idx===2) row.classList.add("top-3");
-        else row.classList.add("next-players");
-        if(selectedMode!=="Overall" && player.highlightMode) row.classList.add("highlight");
+        row.className = "player-row " +
+            (player.position === 1 ? "top-1" : player.position === 2 ? "top-2" : player.position === 3 ? "top-3" : "next-players");
 
-        const left = document.createElement("div");
-        left.className = "player-info";
-        let rankText = selectedMode==="Overall" ? 
-            (player.overall>=400?"Grand Master":player.overall>=250?"Combat Master":"Combat Ace") 
-            : player.gamemodes[selectedMode];
-        left.innerHTML = `
-            <div class="font-bold text-yellow-400">${player.position}.</div>
-            <img src="https://mc-heads.net/avatar/${player.name}/64" alt="${player.name}" class="skin">
-            <div class="player-name">
-                <div class="name">${player.name} <span class="region">[${player.region}]</span></div>
-                ${selectedMode==="Overall"?`<div class="overall">${player.overall} pts</div>`:""}
-                <div class="rank">${rankText}</div>
+        row.innerHTML = `
+            <div class="player-info">
+                <img src="https://mineskin.eu/avatar/${player.name}/64" class="skin" />
+                <div class="player-name">
+                    <span class="name">${player.name}</span>
+                    <span class="overall">Overall: ${player.overall}</span>
+                    <span class="rank">Rank #${player.position} <span class="region">(${player.region})</span></span>
+                </div>
+            </div>
+            <div class="gamemodes">
+                ${Object.entries(player.gamemodes).map(([gm, tier]) => `
+                    <div class="gamemode-item">
+                        <img src="${gamemodeIcons[gm]}" alt="${gm}">
+                        <div class="tier-badge">${tier}</div>
+                    </div>`).join("")}
             </div>
         `;
 
-        const right = document.createElement("div");
-        right.className = "gamemodes";
-        for(const [mode,tier] of Object.entries(player.gamemodes)){
-            const gm = document.createElement("div");
-            gm.className = "gamemode-item";
-            gm.innerHTML = `<img src="${gamemodeIcons[mode]}" alt="${mode}"><span class="tier-badge">${tier}</span>`;
-            right.appendChild(gm);
-        }
-
-        row.appendChild(left);
-        row.appendChild(right);
+        row.addEventListener("click", () => openModal(player));
         container.appendChild(row);
-
-        row.addEventListener("click",()=>openModal(player));
     });
 }
 
 // ----------------------------
-// Filter Function
+// Filters
 // ----------------------------
-function filterLeaderboard(mode){
-    renderLeaderboard(mode);
+function renderFilters() {
+    const filterBar = document.getElementById("filterBar");
+    filterBar.innerHTML = "";
+
+    const gamemodes = Object.keys(gamemodeIcons);
+
+    gamemodes.forEach(gm => {
+        const count = players.filter(p => p.gamemodes[gm] && p.gamemodes[gm] !== "-").length;
+        const div = document.createElement("div");
+        div.className = "filter-item";
+        div.innerHTML = `<span>${gm}</span><span class="filter-count">${count}</span>`;
+        div.addEventListener("click", () => {
+            const filtered = players.filter(p => p.gamemodes[gm] && p.gamemodes[gm] !== "-");
+            renderLeaderboard(filtered);
+        });
+        filterBar.appendChild(div);
+    });
+
+    const resetBtn = document.createElement("div");
+    resetBtn.className = "filter-item";
+    resetBtn.innerHTML = `<span>Reset</span>`;
+    resetBtn.addEventListener("click", () => renderLeaderboard(players));
+    filterBar.appendChild(resetBtn);
 }
 
 // ----------------------------
 // Modal
 // ----------------------------
-const modal = document.getElementById("modal");
-const backdrop = document.getElementById("modal-backdrop");
-const modalName = document.getElementById("modalName");
-const modalRegion = document.getElementById("modalRegion");
-const modalOverall = document.getElementById("modalOverall");
-const modalGamemodes = document.getElementById("modalGamemodes");
-const modalSkin = document.getElementById("modalSkin");
+function openModal(player) {
+    document.getElementById("modalSkin").src = `https://mineskin.eu/avatar/${player.name}/80`;
+    document.getElementById("modalName").innerText = player.name;
+    document.getElementById("modalRegion").innerText = `Region: ${player.region}`;
+    document.getElementById("modalOverall").innerText = `Overall: ${player.overall}`;
+    document.getElementById("modalGamemodes").innerHTML = Object.entries(player.gamemodes).map(([gm, tier]) => `
+        <div class="gamemode-item">
+            <img src="${gamemodeIcons[gm]}" alt="${gm}">
+            <div class="tier-badge">${tier}</div>
+        </div>
+    `).join("");
 
-function openModal(player){
-    modalSkin.src = `https://mc-heads.net/avatar/${player.name}/128`;
-    modalName.textContent = player.name;
-    modalRegion.textContent = `[${player.region}]`;
-    modalOverall.textContent = "Overall: " + player.overall + " points";
-    modalGamemodes.innerHTML = "";
-    for(const [mode,tier] of Object.entries(player.gamemodes)){
-        const gm = document.createElement("div");
-        gm.className = "gamemode-item";
-        gm.innerHTML = `<img src="${gamemodeIcons[mode]}" alt="${mode}"><span class="tier-badge">${tier}</span>`;
-        modalGamemodes.appendChild(gm);
-    }
-    modal.classList.add("active");
-    backdrop.classList.add("active");
+    document.getElementById("modal-backdrop").classList.add("active");
+    document.getElementById("modal").classList.add("active");
 }
-function closeModal(){
-    modal.classList.remove("active");
-    backdrop.classList.remove("active");
+function closeModal() {
+    document.getElementById("modal-backdrop").classList.remove("active");
+    document.getElementById("modal").classList.remove("active");
 }
+document.getElementById("modal-backdrop").addEventListener("click", closeModal);
 
 // ----------------------------
 // Search
 // ----------------------------
-document.getElementById("searchInput").addEventListener("keypress",function(e){
-    if(e.key==="Enter"){
-        const name = e.target.value.trim();
-        const player = players.find(p=>p.name.toLowerCase()===name.toLowerCase());
-        if(player) openModal(player);
-        else alert("Player not found!");
-        e.target.value="";
-    }
+document.getElementById("searchInput").addEventListener("input", e => {
+    const value = e.target.value.toLowerCase();
+    const filtered = players.filter(p => p.name.toLowerCase().includes(value));
+    renderLeaderboard(filtered);
 });
 
 // ----------------------------
-// Initial Render
+// Init
 // ----------------------------
-renderLeaderboard();
+renderLeaderboard(players);
+renderFilters();
 </script>
 </body>
 </html>
