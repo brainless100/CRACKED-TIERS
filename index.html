@@ -91,6 +91,7 @@ body {
     gap: 6px;
     transition: transform 0.2s, background 0.3s;
 }
+.filter-item img { width: 20px; height: 20px; object-fit: contain; }
 .filter-item:hover { transform: scale(1.05); background-color: #3b82f6; }
 .filter-count { background: #f87171; border-radius: 50%; padding: 2px 6px; font-size: 0.75rem; color: #fff; }
 #players-container {
@@ -272,8 +273,9 @@ const players = [
     { position: 10, name: "Player10", region: "NA", overall: 170, gamemodes: { Axe: "-", Nethpot: "-", Mace: "-", Tank: "-", UHC: "-", Crystal: "HT1" } }
 ];
 
-// Gamemode Icons
+// Gamemode Icons + Overall Icon
 const gamemodeIcons = {
+    Overall: "https://i.imgur.com/hRhMCTg.png",
     Axe: "icon/axe.png",
     Nethpot: "icon/nethpot.png",
     Mace: "icon/mace.png",
@@ -314,7 +316,7 @@ function renderLeaderboard(data) {
     });
 }
 
-// Filters
+// Render Filters with icons
 function renderFilters() {
     const filterBar = document.getElementById("filterBar");
     filterBar.innerHTML = "";
@@ -322,12 +324,14 @@ function renderFilters() {
     const gamemodes = Object.keys(gamemodeIcons);
 
     gamemodes.forEach(gm => {
-        const count = players.filter(p => p.gamemodes[gm] && p.gamemodes[gm] !== "-").length;
+        const count = gm === "Overall" ? players.length :
+            players.filter(p => p.gamemodes[gm] && p.gamemodes[gm] !== "-").length;
         const div = document.createElement("div");
         div.className = "filter-item";
-        div.innerHTML = `<span>${gm}</span><span class="filter-count">${count}</span>`;
+        div.innerHTML = `<img src="${gamemodeIcons[gm]}" alt="${gm}"><span>${gm}</span><span class="filter-count">${count}</span>`;
         div.addEventListener("click", () => {
-            const filtered = players.filter(p => p.gamemodes[gm] && p.gamemodes[gm] !== "-");
+            const filtered = gm === "Overall" ? players :
+                players.filter(p => p.gamemodes[gm] && p.gamemodes[gm] !== "-");
             renderLeaderboard(filtered);
         });
         filterBar.appendChild(div);
@@ -349,7 +353,6 @@ function openModal(player) {
 
     // Render gamemodes WITHOUT Overall
     document.getElementById("modalGamemodes").innerHTML = Object.entries(player.gamemodes)
-        .filter(([gm]) => gm !== "Overall")
         .map(([gm, tier]) => `
             <div class="gamemode-item">
                 <img src="${gamemodeIcons[gm]}" alt="${gm}">
