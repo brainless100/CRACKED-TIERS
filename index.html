@@ -208,7 +208,7 @@ body {
     padding: 20px;
     border-radius: 12px;
     z-index:1000;
-    width: 320px;
+    width: 350px;
     color: #fff;
     transition: transform 0.3s ease;
     box-shadow: 0 0 25px rgba(0,0,0,0.7);
@@ -216,7 +216,18 @@ body {
 #modal.active { transform: translate(-50%,-50%) scale(1); }
 #modal h2 { font-size:1.4rem; font-weight:bold; margin-bottom:6px; }
 #modal .region { font-size:0.9rem; color:#f87171; margin-bottom:10px; }
-#modal .overall { background:#6366f1; padding:4px 8px; border-radius:6px; font-weight:bold; margin-bottom:12px; display:inline-block; }
+#modal .overall-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 12px;
+}
+#modal .overall-container img {
+    width: 40px;
+    height: 40px;
+}
 #modal .close-btn { position:absolute; top:8px; right:10px; cursor:pointer; font-weight:bold; font-size:1.2rem; }
 #modal .modal-skin { width:80px; height:80px; border-radius:50%; border:3px solid gold; margin-bottom:8px; }
 </style>
@@ -239,7 +250,10 @@ body {
     <img src="" alt="Skin" class="modal-skin" id="modalSkin">
     <h2 id="modalName"></h2>
     <div class="region" id="modalRegion"></div>
-    <div class="overall" id="modalOverall"></div>
+    <div class="overall-container">
+        <img src="https://i.imgur.com/hRhMCTg.png" alt="Overall Icon">
+        <span id="modalOverall">0</span>
+    </div>
     <div class="gamemodes" id="modalGamemodes"></div>
 </div>
 
@@ -257,13 +271,11 @@ const players = [
     { position: 9, name: "Player9", region: "EU", overall: 210, gamemodes: { Axe: "-", Nethpot: "-", Mace: "-", Tank: "LT1", UHC: "-", Crystal: "-" } },
     { position: 10, name: "Player10", region: "NA", overall: 170, gamemodes: { Axe: "-", Nethpot: "-", Mace: "-", Tank: "-", UHC: "-", Crystal: "HT1" } }
 ];
-
-// Add Overall to gamemodes for filtering
 players.forEach(p => p.gamemodes.Overall = "Overall");
 
 // Gamemode Icons
 const gamemodeIcons = {
-    Overall: "https://i.imgur.com/hRhMCTg.png",  // New Imgur icon
+    Overall: "https://i.imgur.com/hRhMCTg.png",
     Axe: "icon/axe.png",
     Nethpot: "icon/nethpot.png",
     Mace: "icon/mace.png",
@@ -308,21 +320,14 @@ function renderLeaderboard(data) {
 function renderFilters() {
     const filterBar = document.getElementById("filterBar");
     filterBar.innerHTML = "";
-
-    const gamemodes = Object.keys(gamemodeIcons);
-
-    gamemodes.forEach(gm => {
+    Object.keys(gamemodeIcons).forEach(gm => {
         const count = players.filter(p => p.gamemodes[gm] && p.gamemodes[gm] !== "-").length;
         const div = document.createElement("div");
         div.className = "filter-item";
         div.innerHTML = `<span>${gm}</span><span class="filter-count">${count}</span>`;
-        div.addEventListener("click", () => {
-            const filtered = players.filter(p => p.gamemodes[gm] && p.gamemodes[gm] !== "-");
-            renderLeaderboard(filtered);
-        });
+        div.addEventListener("click", () => renderLeaderboard(players.filter(p => p.gamemodes[gm] && p.gamemodes[gm] !== "-")));
         filterBar.appendChild(div);
     });
-
     const resetBtn = document.createElement("div");
     resetBtn.className = "filter-item";
     resetBtn.innerHTML = `<span>Reset</span>`;
@@ -335,14 +340,13 @@ function openModal(player) {
     document.getElementById("modalSkin").src = `https://mineskin.eu/avatar/${player.name}/80.png?overlay`;
     document.getElementById("modalName").innerText = player.name;
     document.getElementById("modalRegion").innerText = `Region: ${player.region}`;
-    document.getElementById("modalOverall").innerText = `Overall: ${player.overall}`;
+    document.getElementById("modalOverall").innerText = player.overall;
     document.getElementById("modalGamemodes").innerHTML = Object.entries(player.gamemodes).map(([gm, tier]) => `
         <div class="gamemode-item">
             <img src="${gamemodeIcons[gm]}" alt="${gm}">
             <div class="tier-badge">${tier}</div>
         </div>
     `).join("");
-
     document.getElementById("modal-backdrop").classList.add("active");
     document.getElementById("modal").classList.add("active");
 }
@@ -355,8 +359,7 @@ document.getElementById("modal-backdrop").addEventListener("click", closeModal);
 // Search
 document.getElementById("searchInput").addEventListener("input", e => {
     const value = e.target.value.toLowerCase();
-    const filtered = players.filter(p => p.name.toLowerCase().includes(value));
-    renderLeaderboard(filtered);
+    renderLeaderboard(players.filter(p => p.name.toLowerCase().includes(value)));
 });
 
 // Init
