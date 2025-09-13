@@ -6,158 +6,229 @@
 <title>Cracked Tiers 1.20</title>
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.3/dist/tailwind.min.css" rel="stylesheet">
 <style>
-/* RESET + SCROLLBAR */
-html, body { margin:0; padding:0; background:#0f172a; font-family:'Arial',sans-serif; overflow-x:hidden; overflow-y:auto; }
-::-webkit-scrollbar { width:10px; }
-::-webkit-scrollbar-track { background:#1e293b; border-radius:10px; }
-::-webkit-scrollbar-thumb { background:#3b82f6; border-radius:10px; border:2px solid #1e293b; }
-body { padding-top:140px; }
+html, body {
+    margin: 0; padding: 0;
+    background-color: #0f172a;
+    font-family: 'Arial', sans-serif;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+::-webkit-scrollbar {
+    width: 12px;
+}
+::-webkit-scrollbar-track { background: #1e293b; border-radius: 10px; }
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #00ffff, #3b82f6);
+    border-radius: 10px; border: 3px solid #1e293b;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #22ddff, #60a5fa);
+}
+* { scrollbar-width: thin; scrollbar-color: #00ffff #1e293b; }
+body { padding-top: 120px; }
 
-/* HEADER */
-.header { position:fixed; top:0; left:0; width:100%; padding:12px 24px; display:flex; justify-content:space-between; align-items:center; background:rgba(15,23,42,0.95); z-index:1000; box-shadow:0 4px 12px rgba(0,0,0,0.3); }
-.logo { font-size:2rem; font-weight:bold; color:#facc15; text-shadow:1px 1px 3px rgba(0,0,0,0.5); }
-.search-input { padding:8px 14px; border-radius:12px; border:none; outline:none; font-size:1rem; background:#1e293b; color:#fff; transition:0.2s; }
-.search-input:focus { transform:scale(1.02); box-shadow:0 0 12px #3b82f6; }
+.header {
+    position: fixed; top:0; left:0; width:100%;
+    padding:10px 20px; display:flex; justify-content:space-between; align-items:center;
+    background-color: rgba(15,23,42,0.95); z-index:1000;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+.logo { font-size: 1.8rem; font-weight:bold; color:#facc15; text-shadow: 2px 2px 6px rgba(0,0,0,0.5); }
+.search-input {
+    padding:6px 12px; border-radius:10px; border:none; outline:none;
+    font-size:1rem; box-shadow:0 4px 12px rgba(0,0,0,0.3);
+    background-color:#1e293b; color:#fff;
+}
 
-/* FILTER BAR */
-.filter-bar { position:fixed; top:70px; left:0; width:100%; display:flex; justify-content:center; gap:10px; padding:8px 0; background:rgba(15,23,42,0.95); z-index:999; flex-wrap:wrap; }
-.filter-item { padding:6px 12px; border-radius:10px; background:#1e293b; color:#facc15; font-weight:bold; cursor:pointer; display:flex; align-items:center; gap:4px; transition:0.2s; }
+.filter-bar {
+    position: fixed; top:60px; left:0; width:100%;
+    background-color: rgba(15,23,42,0.95);
+    display:flex; justify-content:center; align-items:center;
+    gap: 12px; padding: 8px 0; z-index:999; flex-wrap:wrap;
+}
+.filter-item {
+    padding:6px 12px; border-radius:10px; background-color:#1e293b;
+    color:#facc15; font-weight:bold; cursor:pointer; display:flex;
+    align-items:center; gap:6px; transition: transform 0.2s, background 0.3s;
+}
 .filter-item img { width:20px; height:20px; object-fit:contain; }
-.filter-item:hover { transform:scale(1.05); background:#3b82f6; }
-.filter-count { background:#f87171; border-radius:50%; padding:2px 5px; font-size:0.75rem; color:#fff; }
+.filter-item:hover { transform: scale(1.05); background-color:#3b82f6; }
+.filter-count { background:#f87171; border-radius:50%; padding:2px 6px; font-size:0.75rem; color:#fff; }
 
-/* PLAYERS */
-#players-container { max-width:6xl; margin:0 auto; display:flex; flex-direction:column; gap:12px; padding-bottom:40px; }
-.player-row { display:flex; justify-content:space-between; align-items:center; background:rgba(15,23,42,0.75); padding:10px 14px; border-radius:12px; cursor:pointer; transition:0.2s; }
-.player-row:hover { transform:scale(1.02); box-shadow:0 0 15px #3b82f6; }
+#players-container { max-width: 6xl; margin:0 auto; display:flex; flex-direction:column; gap:12px; }
+.player-row {
+    display:flex; justify-content:space-between; align-items:center;
+    background-color: rgba(15,23,42,0.75); padding:10px 14px; border-radius:12px;
+    transition: transform 0.2s, box-shadow 0.4s; cursor:pointer;
+}
+.player-row:hover {
+    transform: scale(1.02); box-shadow: 0 0 20px rgba(99,102,241,0.3);
+}
 .player-info { display:flex; align-items:center; gap:10px; min-width:220px; }
 .player-info img.skin { width:64px; height:64px; border-radius:50%; border:2px solid #6366f1; }
 .player-name { display:flex; flex-direction:column; }
 .player-name .name { font-weight:bold; font-size:1rem; color:#facc15; }
-.player-name .overall { font-size:0.95rem; color:#fff; margin-top:2px; display:flex; align-items:center; gap:4px; font-weight:bold; }
-.player-name .overall img { width:18px; height:18px; }
-.player-name .rank { font-size:0.8rem; color:#22c55e; font-weight:bold; margin-top:2px; }
-.player-name .region { font-size:0.8rem; color:#f87171; font-weight:bold; margin-left:4px; }
+.player-name .overall { font-size:0.85rem; color:#fff; margin-top:2px; }
+.player-name .rank { font-size:0.8rem; color:#22c55e; font-weight:bold; }
+.player-name .region { font-size:0.8rem; color:#f87171; font-weight:bold; margin-left:5px; }
 
-/* GAMEMODES */
-.gamemodes { display:flex; flex-wrap:wrap; gap:10px; }
-.gamemode-item { display:flex; flex-direction:column; align-items:center; min-width:55px; transition:0.2s; }
-.gamemode-item img { width:44px; height:44px; margin-bottom:2px; object-fit:contain; border-radius:6px; }
-.gamemode-item img:hover { transform:scale(1.1); }
-.tier-badge { background:#1e293b; color:#f8fafc; padding:2px 5px; border-radius:6px; font-size:0.7rem; font-weight:600; text-align:center; width:100%; }
+.gamemodes { display:flex; flex-wrap:wrap; gap:12px; }
+.gamemode-item { display:flex; flex-direction:column; align-items:center; min-width:60px; }
+.gamemode-item img { width:48px; height:48px; margin-bottom:2px; object-fit:contain; }
+.tier-badge { background-color:#1e293b; color:#f8fafc; padding:2px 6px; border-radius:6px; font-size:0.75rem; text-align:center; font-weight:600; width:100%; }
 
-/* TOP PLAYER HIGHLIGHT */
-.top-1 { border:2px solid gold; }
-.top-2 { border:2px solid silver; }
-.top-3 { border:2px solid #cd7f32; }
-.next-players { border:1px solid grey; background: rgba(128,128,128,0.1); }
+@keyframes proGlow {0% {box-shadow:0 0 8px rgba(255,255,255,0.2);}50% {box-shadow:0 0 16px rgba(255,255,255,0.5);}100% {box-shadow:0 0 8px rgba(255,255,255,0.2);}}
+.top-1 { border:3px solid gold; animation:proGlow 1.5s infinite; }
+.top-2 { border:3px solid silver; animation:proGlow 1.5s infinite; }
+.top-3 { border:3px solid #cd7f32; animation:proGlow 1.5s infinite; }
+.next-players { border:2px solid grey; background: rgba(128,128,128,0.1); }
 
-/* MODAL */
-#modal-backdrop { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); opacity:0; pointer-events:none; transition:0.2s; z-index:900; }
+#modal-backdrop {
+    position: fixed; top:0; left:0; width:100%; height:100%;
+    background: rgba(0,0,0,0.5); backdrop-filter: blur(6px);
+    opacity:0; pointer-events:none; transition: opacity 0.3s ease; z-index:900;
+}
 #modal-backdrop.active { opacity:1; pointer-events:all; }
-#modal { position:fixed; top:50%; left:50%; transform:translate(-50%,-50%) scale(0); background:#1e293b; padding:20px; border-radius:12px; width:360px; color:#fff; z-index:1000; box-shadow:0 0 20px #3b82f6; transition:0.25s; }
-#modal.active { transform:translate(-50%,-50%) scale(1); }
-#modal h2 { font-size:1.4rem; font-weight:bold; margin-bottom:6px; color:#facc15; }
+
+#modal {
+    position: fixed; top:50%; left:50%; transform: translate(-50%,-50%) scale(0);
+    background-color:#1e293b; padding:20px; border-radius:12px; z-index:1000;
+    width:360px; color:#fff; transition: transform 0.3s ease;
+    box-shadow: 0 0 25px rgba(0,0,0,0.7);
+}
+#modal.active { transform: translate(-50%,-50%) scale(1); }
+#modal h2 { font-size:1.4rem; font-weight:bold; margin-bottom:6px; }
 #modal .region { font-size:0.9rem; color:#f87171; margin-bottom:10px; }
-#modal .overall { background:#6366f1; padding:6px 10px; border-radius:8px; font-weight:bold; display:flex; align-items:center; gap:6px; font-size:1.1rem; }
-#modal .modal-skin { width:80px; height:80px; border-radius:50%; border:3px solid gold; margin-bottom:8px; }
+#modal .overall {
+    background:#1e293b; padding:6px 10px; border-radius:8px; font-weight:bold;
+    margin-bottom:12px; display:flex; align-items:center; gap:6px; font-size:1rem; /* reduced from 1.2rem */
+}
 #modal .close-btn { position:absolute; top:8px; right:10px; cursor:pointer; font-weight:bold; font-size:1.2rem; }
+#modal .modal-skin { width:80px; height:80px; border-radius:50%; border:3px solid gold; margin-bottom:8px; }
+#modal .modal-overall-icon { width:24px; height:24px; } /* smaller icon */
 </style>
 </head>
 <body>
 
 <div class="header">
     <div class="logo">Cracked Tiers</div>
-    <input type="text" id="searchInput" class="search-input" placeholder="Search player..." />
+    <div class="search-container">
+        <input type="text" id="searchInput" class="search-input" placeholder="Search player..." />
+    </div>
 </div>
 
 <div class="filter-bar" id="filterBar"></div>
-<div id="players-container"></div>
+<div id="players-container" class="max-w-6xl mx-auto space-y-3 mt-5"></div>
 
 <div id="modal-backdrop"></div>
 <div id="modal">
     <span class="close-btn" onclick="closeModal()">×</span>
-    <img src="" class="modal-skin" id="modalSkin">
+    <img src="" alt="Skin" class="modal-skin" id="modalSkin">
     <h2 id="modalName"></h2>
     <div class="region" id="modalRegion"></div>
-    <div class="overall">
-        <img src="https://i.imgur.com/hRhMCTg.png" class="modal-overall-icon">
+    <div class="overall" id="modalOverall">
+        <img src="https://i.imgur.com/hRhMCTg.png" class="modal-overall-icon" alt="Overall Icon">
         <span id="modalOverallPoints"></span>
     </div>
     <div class="gamemodes" id="modalGamemodes"></div>
 </div>
 
 <script>
-// DATA
-const players=[
-{position:1,name:"brainless100",region:"AS",overall:405,gamemodes:{Axe:"HT2",Nethpot:"HT4",Mace:"HT3 Strong",Tank:"-",UHC:"-",Crystal:"-"}},
-{position:2,name:"GummyBearTheGOAT",region:"AS",overall:320,gamemodes:{Axe:"LT3",Nethpot:"HT3",Mace:"-",Tank:"-",UHC:"LT3",Crystal:"-"}},
-{position:3,name:"Player3",region:"EU",overall:280,gamemodes:{Axe:"-",Nethpot:"-",Mace:"-",Tank:"-",UHC:"-",Crystal:"-"}},
-{position:4,name:"Player4",region:"AS",overall:200,gamemodes:{Axe:"-",Nethpot:"-",Mace:"-",Tank:"-",UHC:"-",Crystal:"-"}},
-{position:5,name:"Player5",region:"NA",overall:150,gamemodes:{Axe:"-",Nethpot:"-",Mace:"-",Tank:"-",UHC:"-",Crystal:"-"}},
-{position:6,name:"Player6",region:"EU",overall:180,gamemodes:{Axe:"-",Nethpot:"-",Mace:"-",Tank:"-",UHC:"LT1",Crystal:"-"}},
-{position:7,name:"Player7",region:"NA",overall:220,gamemodes:{Axe:"HT1",Nethpot:"-",Mace:"-",Tank:"-",UHC:"-",Crystal:"-"}},
-{position:8,name:"Player8",region:"AS",overall:190,gamemodes:{Axe:"-",Nethpot:"HT2",Mace:"-",Tank:"-",UHC:"-",Crystal:"-"}},
-{position:9,name:"Player9",region:"EU",overall:210,gamemodes:{Axe:"-",Nethpot:"-",Mace:"-",Tank:"LT1",UHC:"-",Crystal:"-"}},
-{position:10,name:"Player10",region:"NA",overall:170,gamemodes:{Axe:"-",Nethpot:"-",Mace:"-",Tank:"-",UHC:"-",Crystal:"HT1"}}
+const players = [
+    { position: 1, name: "brainless100", region: "AS", overall: 405, gamemodes: { Axe: "HT2", Nethpot: "HT4", Mace: "HT3 Strong", Tank: "-", UHC: "-", Crystal: "-" } },
+    { position: 2, name: "GummyBearTheGOAT", region: "AS", overall: 320, gamemodes: { Axe: "LT3", Nethpot: "HT3", Mace: "-", Tank: "-", UHC: "LT3", Crystal: "-" } },
+    { position: 3, name: "Player3", region: "EU", overall: 280, gamemodes: { Axe: "-", Nethpot: "-", Mace: "-", Tank: "-", UHC: "-", Crystal: "-" } },
+    { position: 4, name: "Player4", region: "AS", overall: 200, gamemodes: { Axe: "-", Nethpot: "-", Mace: "-", Tank: "-", UHC: "-", Crystal: "-" } }
 ];
 
-const gamemodeIcons={Overall:"https://i.imgur.com/hRhMCTg.png",Axe:"icon/axe.png",Nethpot:"icon/nethpot.png",Mace:"icon/mace.png",Tank:"icon/tank.png",UHC:"icon/uhc.png",Crystal:"icon/crystal.png"};
+const gamemodeIcons = {
+    Overall: "https://i.imgur.com/hRhMCTg.png",
+    Axe: "icon/axe.png",
+    Nethpot: "icon/nethpot.png",
+    Mace: "icon/mace.png",
+    Tank: "icon/tank.png",
+    UHC: "icon/uhc.png",
+    Crystal: "icon/crystal.png"
+};
 
-// RENDER
-function renderLeaderboard(data){
-const container=document.getElementById("players-container"); container.innerHTML="";
-data.forEach(p=>{
-const row=document.createElement("div");
-row.className="player-row "+(p.position===1?"top-1":p.position===2?"top-2":p.position===3?"top-3":"next-players");
-row.innerHTML=`
-<div class="player-info">
-<img src="https://mineskin.eu/avatar/${p.name}/64.png?overlay" class="skin"/>
-<div class="player-name">
-<span class="name">${p.name}</span>
-<span class="overall"><img src="${gamemodeIcons.Overall}">${p.overall}</span>
-<span class="rank">Rank #${p.position} <span class="region">(${p.region})</span></span>
-</div></div>
-<div class="gamemodes">${Object.entries(p.gamemodes).map(([gm,tier])=>`
-<div class="gamemode-item"><img src="${gamemodeIcons[gm]}" alt="${gm}"><div class="tier-badge">${tier}</div></div>`).join("")}</div>`;
-row.addEventListener("click",()=>openModal(p));
-container.appendChild(row);
+function renderLeaderboard(data) {
+    const container = document.getElementById("players-container");
+    container.innerHTML = "";
+    data.forEach(player => {
+        const row = document.createElement("div");
+        row.className = "player-row " + 
+            (player.position===1?"top-1":player.position===2?"top-2":player.position===3?"top-3":"next-players");
+        row.innerHTML = `
+            <div class="player-info">
+                <img src="https://crafatar.com/avatars/${player.name}?size=64&overlay" class="skin" />
+                <div class="player-name">
+                    <span class="name">${player.name}</span>
+                    <span class="overall">Overall: ${player.overall}</span>
+                    <span class="rank">Rank #${player.position} <span class="region">(${player.region})</span></span>
+                </div>
+            </div>
+            <div class="gamemodes">
+                ${Object.entries(player.gamemodes).map(([gm, tier]) => `
+                    <div class="gamemode-item">
+                        <img src="${gamemodeIcons[gm]}" alt="${gm}">
+                        <div class="tier-badge">${tier}</div>
+                    </div>`).join("")}
+            </div>
+        `;
+        row.addEventListener("click", ()=>openModal(player));
+        container.appendChild(row);
+    });
+}
+
+function renderFilters() {
+    const filterBar = document.getElementById("filterBar");
+    filterBar.innerHTML = "";
+    Object.keys(gamemodeIcons).forEach(gm => {
+        const count = gm==="Overall"?players.length:players.filter(p=>p.gamemodes[gm] && p.gamemodes[gm]!=="-").length;
+        const div = document.createElement("div");
+        div.className="filter-item";
+        div.innerHTML=`<img src="${gamemodeIcons[gm]}" alt="${gm}"><span>${gm}</span><span class="filter-count">${count}</span>`;
+        div.addEventListener("click", ()=> {
+            const filtered = gm==="Overall"?players:players.filter(p=>p.gamemodes[gm] && p.gamemodes[gm]!=="-");
+            renderLeaderboard(filtered);
+        });
+        filterBar.appendChild(div);
+    });
+    const resetBtn=document.createElement("div");
+    resetBtn.className="filter-item"; resetBtn.innerHTML=`<span>Reset</span>`;
+    resetBtn.addEventListener("click", ()=>renderLeaderboard(players));
+    filterBar.appendChild(resetBtn);
+}
+
+function openModal(player) {
+    document.getElementById("modalSkin").src=`https://crafatar.com/avatars/${player.name}?size=80&overlay`;
+    document.getElementById("modalName").innerText=player.name;
+    document.getElementById("modalRegion").innerText=`Region: ${player.region}`;
+    document.getElementById("modalOverallPoints").innerText=player.overall;
+    document.getElementById("modalGamemodes").innerHTML = Object.entries(player.gamemodes)
+        .filter(([gm])=>gm!=="Overall")
+        .map(([gm,tier])=>`
+            <div class="gamemode-item">
+                <img src="${gamemodeIcons[gm]}" alt="${gm}">
+                <div class="tier-badge">${tier}</div>
+            </div>
+        `).join("");
+    document.getElementById("modal-backdrop").classList.add("active");
+    document.getElementById("modal").classList.add("active");
+}
+
+function closeModal() {
+    document.getElementById("modal-backdrop").classList.remove("active");
+    document.getElementById("modal").classList.remove("active");
+}
+document.getElementById("modal-backdrop").addEventListener("click", closeModal);
+document.getElementById("searchInput").addEventListener("input", e=>{
+    const value=e.target.value.toLowerCase();
+    renderLeaderboard(players.filter(p=>p.name.toLowerCase().includes(value)));
 });
-}
 
-// FILTERS
-function renderFilters(){
-const filterBar=document.getElementById("filterBar"); filterBar.innerHTML="";
-Object.keys(gamemodeIcons).forEach(gm=>{
-const count=gm==="Overall"?players.length:players.filter(p=>p.gamemodes[gm]&&p.gamemodes[gm]!="-").length;
-const div=document.createElement("div"); div.className="filter-item";
-div.innerHTML=`<img src="${gamemodeIcons[gm]}"><span>${gm}</span><span class="filter-count">${count}</span>`;
-div.addEventListener("click",()=>renderLeaderboard(gm==="Overall"?players:players.filter(p=>p.gamemodes[gm]&&p.gamemodes[gm]!="-")));
-filterBar.appendChild(div);
-});
-const resetBtn=document.createElement("div"); resetBtn.className="filter-item"; resetBtn.innerHTML=`<span>Reset</span>`;
-resetBtn.addEventListener("click",()=>renderLeaderboard(players)); filterBar.appendChild(resetBtn);
-}
-
-// MODAL
-function openModal(p){
-document.getElementById("modalSkin").src=`https://mineskin.eu/avatar/${p.name}/80.png?overlay`;
-document.getElementById("modalName").innerText=p.name;
-document.getElementById("modalRegion").innerText=`Region: ${p.region}`;
-document.getElementById("modalOverallPoints").innerText=p.overall;
-document.getElementById("modalGamemodes").innerHTML=Object.entries(p.gamemodes).map(([gm,tier])=>`
-<div class="gamemode-item"><img src="${gamemodeIcons[gm]}" alt="${gm}"><div class="tier-badge">${tier}</div></div>`).join("");
-document.getElementById("modal-backdrop").classList.add("active");
-document.getElementById("modal").classList.add("active");
-}
-function closeModal(){document.getElementById("modal-backdrop").classList.remove("active"); document.getElementById("modal").classList.remove("active");}
-document.getElementById("modal-backdrop").addEventListener("click",closeModal);
-
-// SEARCH
-document.getElementById("searchInput").addEventListener("input",e=>{const val=e.target.value.toLowerCase(); renderLeaderboard(players.filter(p=>p.name.toLowerCase().includes(val)));});
-
-// INIT
-renderLeaderboard(players); renderFilters();
+renderLeaderboard(players);
+renderFilters();
 </script>
 </body>
 </html>
