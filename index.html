@@ -14,8 +14,8 @@ html, body {
     padding: 0;
     background-color: #0f172a;
     font-family: 'Arial', sans-serif;
-    overflow-x: hidden; /* horizontal scroll hatane ke liye */
-    overflow-y: auto; /* vertical scroll rahe */
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 /* Chrome, Edge, Safari */
@@ -45,7 +45,7 @@ html, body {
    Header + Filter + Body
 ----------------------------- */
 body {
-    padding-top: 120px; /* header + filter bar space */
+    padding-top: 120px;
 }
 
 /* Header */
@@ -275,7 +275,7 @@ body {
 
 <script>
 // ----------------------------
-// Players Data (10 players)
+// Players Data
 // ----------------------------
 const players = [
     { position: 1, name: "brainless100", region: "AS", overall: 405, gamemodes: { Axe: "HT2", Nethpot: "HT4", Mace: "HT3 Strong", Tank: "-", UHC: "-", Crystal: "-" } },
@@ -317,7 +317,7 @@ function renderLeaderboard(data) {
 
         row.innerHTML = `
             <div class="player-info">
-                <img src="https://mineskin.eu/avatar/${player.name}/64" class="skin" />
+                <img src="https://mineskin.eu/head/${player.name}/64.png?overlay" class="skin" />
                 <div class="player-name">
                     <span class="name">${player.name}</span>
                     <span class="overall">Overall: ${player.overall}</span>
@@ -370,7 +370,7 @@ function renderFilters() {
 // Modal
 // ----------------------------
 function openModal(player) {
-    document.getElementById("modalSkin").src = `https://mineskin.eu/avatar/${player.name}/80`;
+    document.getElementById("modalSkin").src = `https://mineskin.eu/head/${player.name}/80.png?overlay`;
     document.getElementById("modalName").innerText = player.name;
     document.getElementById("modalRegion").innerText = `Region: ${player.region}`;
     document.getElementById("modalOverall").innerText = `Overall: ${player.overall}`;
